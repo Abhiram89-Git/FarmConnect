@@ -1,0 +1,531 @@
+.plant {
+  width: 100vw;
+  height: calc(100vh - 70px); 
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 70px;     /* ADD: space for fixed footer */
+}
+ul{
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+}
+li{
+    background-color: rgb(72, 163, 68);
+    border-radius: 10px;
+    margin: 8px;
+    width: 300px;
+    padding: 5px;
+}
+.plant-categories{
+    font-size: 25px;
+    padding: 15px;
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.footer {
+  position: fixed;        /* Fix it at the bottom */
+  bottom: 0;              /* Stick to bottom */
+  left: 0;                /* Start from left */
+  width: 100%;            /* Full width */
+  background: #fafaf6;
+  display: flex;
+  gap: 18px;
+  justify-content: space-around;
+  padding: 16px 0;
+  box-shadow: 0 -2px 8px rgba(88,169,116,0.05);
+  z-index: 1000;          /* Make sure it stays on top of content */
+}
+
+.footer button {
+  background: #58a974;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 30px;
+  font-size: 1.05rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.footer button:hover {
+  background: #417c54;
+}
+/* ===== PREMIUM PLANT SECTIONS ===== */
+
+.plant-section-container {
+   margin-left: 45px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    margin-top: 0px;
+}
+
+.section-toggle-btn {
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.02) 100%);
+    border: 2px solid;
+    border-radius: 15px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+
+.section-toggle-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    transition: left 0.3s ease;
+    z-index: -1;
+}
+
+.section-toggle-btn:hover::before {
+    left: 0;
+}
+
+.section-btn-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+    text-align: left;
+}
+
+.section-icon {
+    font-size: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.section-btn-text h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.section-btn-text p {
+    margin: 5px 0 0 0;
+    font-size: 14px;
+    opacity: 0.8;
+    font-weight: 400;
+}
+
+.toggle-arrow {
+    font-size: 20px;
+    transition: transform 0.3s ease;
+}
+
+/* Section Specific Styles */
+.input-section .section-toggle-btn {
+    border-color: #8B4513;
+    color: #8B4513;
+    background: linear-gradient(135deg, rgba(139, 69, 19, 0.08) 0%, rgba(139, 69, 19, 0.03) 100%);
+}
+
+.input-section .section-toggle-btn:hover {
+    background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(139, 69, 19, 0.3);
+}
+
+.planting-section .section-toggle-btn {
+    border-color: #27AE60;
+    color: #27AE60;
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.08) 0%, rgba(39, 174, 96, 0.03) 100%);
+}
+
+.planting-section .section-toggle-btn:hover {
+    background: linear-gradient(135deg, #27AE60 0%, #229954 100%);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(39, 174, 96, 0.3);
+}
+
+.produce-section .section-toggle-btn {
+    border-color: #E74C3C;
+    color: #E74C3C;
+    background: linear-gradient(135deg, rgba(231, 76, 60, 0.08) 0%, rgba(231, 76, 60, 0.03) 100%);
+}
+
+.produce-section .section-toggle-btn:hover {
+    background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(231, 76, 60, 0.3);
+}
+
+.equipment-section .section-toggle-btn {
+    border-color: #2980B9;
+    color: #2980B9;
+    background: linear-gradient(135deg, rgba(41, 128, 185, 0.08) 0%, rgba(41, 128, 185, 0.03) 100%);
+}
+
+.equipment-section .section-toggle-btn:hover {
+    background: linear-gradient(135deg, #2980B9 0%, #1F618D 100%);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(41, 128, 185, 0.3);
+}
+
+.plant-section-content {
+    background: white;
+    padding: 40px 20px;
+    animation: slideDown 0.4s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.plant-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+/* PREMIUM PLANT CARD */
+.plant-card-premium {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 15px;
+    padding: 20px;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.plant-card-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #8B4513, #27AE60, #E74C3C, #2980B9);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.plant-card-premium:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.plant-card-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #FF6B6B 0%, #FF8E72 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.plant-card-header-premium {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 18px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+}
+
+.plant-card-emoji {
+    font-size: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.plant-card-header-text {
+    flex: 1;
+    margin-top: 5px;
+}
+
+.plant-card-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 5px 0;
+}
+
+.plant-card-subtitle {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+    font-weight: 500;
+}
+
+.plant-card-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.metric-box {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.metric-box:hover {
+    background: linear-gradient(135deg, #f0f2f5 0%, #f8f9fa 100%);
+    transform: translateY(-2px);
+}
+
+.metric-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.metric-label {
+    font-size: 11px;
+    color: #999;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.metric-value {
+    font-size: 14px;
+    color: #2c3e50;
+    margin: 5px 0 0 0;
+    font-weight: 700;
+}
+
+.plant-card-price {
+    background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border: 2px solid #FF9800;
+    min-height: 80px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.2);
+}
+
+.plant-card-price:hover {
+    box-shadow: 0 8px 20px rgba(255, 152, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+.price-content {
+    flex: 1;
+}
+
+.price-label {
+    font-weight: 700;
+    color: #F57F17;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.price-display {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.price-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #F57F17;
+}
+
+.price-value.loading {
+    font-size: 14px;
+    font-style: italic;
+    opacity: 0.7;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+.price-change {
+    font-size: 16px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.price-change.up {
+    color: #27AE60;
+    background: rgba(39, 174, 96, 0.1);
+}
+
+.price-change.down {
+    color: #E74C3C;
+    background: rgba(231, 76, 60, 0.1);
+}
+
+.price-updated {
+    font-size: 11px;
+    color: #F57F17;
+    margin: 0;
+    text-align: right;
+    opacity: 0.8;
+    margin-top: 4px;
+}
+
+.plant-card-benefits {
+    margin-bottom: 20px;
+}
+
+.benefits-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 12px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.benefits-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.benefit-tag {
+    background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+    color: #1565C0;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid rgba(21, 101, 192, 0.2);
+    transition: all 0.3s ease;
+}
+
+.benefit-tag:hover {
+    background: linear-gradient(135deg, #1565C0 0%, #1976D2 100%);
+    color: white;
+    transform: scale(1.05);
+}
+
+.plant-card-maintenance {
+    background: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%);
+    padding: 18px;
+    border-radius: 10px;
+    border: 1px solid rgba(156, 39, 176, 0.2);
+}
+
+.maintenance-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #6A1B9A;
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.maintenance-text {
+    font-size: 13px;
+    color: #4A148C;
+    margin: 0;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+    .plant-cards-grid {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .section-btn-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .section-btn-text h2 {
+        font-size: 20px;
+    }
+
+    .plant-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .plant-card-premium {
+        padding: 20px;
+    }
+
+    .plant-card-metrics {
+        grid-template-columns: 1fr;
+    }
+
+    .plant-section-content {
+        padding: 20px 15px;
+    }
+
+    .benefit-tag {
+        font-size: 11px;
+    }
+
+    .plant-card-price {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .price-updated {
+        text-align: left;
+    }
+}

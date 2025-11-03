@@ -1,0 +1,7 @@
+.crop-content{
+    display: flex;
+    justify-content: space-evenly;
+}
+.cropdetails{
+    margin-left: 25px;
+}

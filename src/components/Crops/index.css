@@ -1,0 +1,53 @@
+.crop{
+    height: 100vh;
+    width: 100vw;
+}
+ul{
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+}
+.crop-li{
+    background-color: rgb(226, 91, 38);
+    border-radius: 10px;
+    margin: 8px;
+    width: 300px;
+    padding: 5px;
+}
+.crop-categories{
+    font-size: 25px;
+    padding: 15px;
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.footer {
+  position: fixed;        /* Fix it at the bottom */
+  bottom: 0;              /* Stick to bottom */
+  left: 0;                /* Start from left */
+  width: 100%;            /* Full width */
+  background: #fafaf6;
+  display: flex;
+  gap: 18px;
+  justify-content: space-around;
+  padding: 16px 0;
+  box-shadow: 0 -2px 8px rgba(88,169,116,0.05);
+  z-index: 1000;          /* Make sure it stays on top of content */
+}
+
+.footer button {
+  background: #58a974;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 30px;
+  font-size: 1.05rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.footer button:hover {
+  background: #417c54;
+}

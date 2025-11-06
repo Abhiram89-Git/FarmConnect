@@ -29,6 +29,16 @@ class Home extends Component {
     selectedDistrict: 'Chengalpattu',
     showLocationModal: false,
     userLocation: { state: 'Tamil Nadu', district: 'Chengalpattu' },
+    showUploadForm: false,
+    cropListings: [
+      { id: 1, crop: 'Cotton', quantity: '500 kg', price: '₹70/kg', farmer: 'Rajesh Kumar', phone: '+91 98765 43210', email: 'rajesh.kumar@farm.com', location: 'Chengalpattu, Tamil Nadu', description: 'Premium quality organic cotton, ready for immediate pickup', image: '🌾' },
+      { id: 2, crop: 'Chilli', quantity: '200 kg', price: '₹110/kg', farmer: 'Priya Sharma', phone: '+91 98765 43211', email: 'priya.sharma@farm.com', location: 'Kancheepuram, Tamil Nadu', description: 'Spicy red chillies, excellent quality for wholesale', image: '🌶️' },
+      { id: 3, crop: 'Maize', quantity: '1000 kg', price: '₹20/kg', farmer: 'Mohan Reddy', phone: '+91 98765 43212', email: 'mohan.reddy@farm.com', location: 'Chennai, Tamil Nadu', description: 'Fresh harvest, suitable for animal feed and processing', image: '🌽' },
+      { id: 4, crop: 'Paddy', quantity: '800 kg', price: '₹48/kg', farmer: 'Lakshmi Devi', phone: '+91 98765 43213', email: 'lakshmi.devi@farm.com', location: 'Tiruvallur, Tamil Nadu', description: 'High-yield variety, well-dried and cleaned', image: '🍚' },
+      { id: 5, crop: 'Groundnut', quantity: '300 kg', price: '₹55/kg', farmer: 'Venkat Rao', phone: '+91 98765 43214', email: 'venkat.rao@farm.com', location: 'Vellore, Tamil Nadu', description: 'Oil-rich groundnuts, perfect for oil extraction', image: '🥜' },
+      { id: 6, crop: 'Sugarcane', quantity: '2000 kg', price: '₹450/kg', farmer: 'Arun Kumar', phone: '+91 98765 43215', email: 'arun.kumar@farm.com', location: 'Coimbatore, Tamil Nadu', description: 'Sweet variety, ideal for jaggery production', image: '🎋' }
+    ],
+    newCrop: { crop: '', quantity: '', price: '', farmer: '', phone: '', email: '', location: '', description: '' },
     landTypes: [
       { id: 1, name: 'Loamy Soil', icon: '🌍', pH: '6.5-7.5', moisture: 'High', drainage: 'Good', fertility: 'Very High', suitableCrops: ['Rice', 'Wheat', 'Maize', 'Potato', 'Sugarcane'], requirements: { rainfall: '600-800 mm', temperature: '20-30°C', depth: '60-100 cm', organic: '3-4%' }, lastHarvest: '2024-09-15', nextPlanting: '2024-11-01', status: 'Excellent' },
       { id: 2, name: 'Sandy Soil', icon: '🏜️', pH: '6.0-7.0', moisture: 'Low', drainage: 'Very Good', fertility: 'Low', suitableCrops: ['Peanut', 'Watermelon', 'Carrot', 'Millets', 'Pulses'], requirements: { rainfall: '400-600 mm', temperature: '25-35°C', depth: '45-60 cm', organic: '1-2%' }, lastHarvest: '2024-08-20', nextPlanting: '2024-10-15', status: 'Good' },
@@ -182,6 +192,43 @@ class Home extends Component {
     return { sellPrices, buyPrices };
   };
 
+  toggleUploadForm = () => {
+    this.setState({ showUploadForm: !this.state.showUploadForm });
+  };
+
+  handleInputChange = (e) => {
+    const { name, value } = e.target;
+    this.setState({ newCrop: { ...this.state.newCrop, [name]: value } });
+  };
+
+  handleCropSubmit = (e) => {
+    e.preventDefault();
+    const { newCrop, cropListings } = this.state;
+    const cropIcons = { Cotton: '🌾', Chilli: '🌶️', Maize: '🌽', Paddy: '🍚', Groundnut: '🥜', Sugarcane: '🎋', Wheat: '🌾', Tomato: '🍅', Potato: '🥔', Onion: '🧅' };
+    
+    if (newCrop.crop && newCrop.quantity && newCrop.price && newCrop.farmer && newCrop.phone) {
+      const newListing = {
+        id: cropListings.length + 1,
+        ...newCrop,
+        image: cropIcons[newCrop.crop] || '🌱'
+      };
+      
+      this.setState({
+        cropListings: [...cropListings, newListing],
+        newCrop: { crop: '', quantity: '', price: '', farmer: '', phone: '', email: '', location: '', description: '' },
+        showUploadForm: false
+      });
+    }
+  };
+
+  handleContactFarmer = (email, crop) => {
+    window.location.href = `mailto:${email}?subject=Interested in buying ${crop}&body=Hello, I am interested in buying your ${crop}. Please contact me.`;
+  };
+
+  handleCallFarmer = (phone) => {
+    window.location.href = `tel:${phone}`;
+  };
+
   toggleLocationModal = () => {
     this.setState({ showLocationModal: !this.state.showLocationModal });
   };
@@ -192,38 +239,27 @@ class Home extends Component {
   };
 
   toggleFeature = (featureName) => {
-    const featureStates = {
-      showCropCalendar: featureName === 'calendar',
-      showSchemes: featureName === 'schemes',
-      showPestGuide: featureName === 'pests',
-      showForum: featureName === 'forum',
-      showLoanCalculator: featureName === 'loan',
-      showForecast: featureName === 'forecast'
-    };
+    const currentFeature = this.state.activeFeature;
     
-    // If the same button is clicked, toggle it off. Otherwise, hide all others and show the clicked one.
-    if (featureName === 'calendar' && this.state.showCropCalendar) {
-      this.setState({ showCropCalendar: false });
-    } else if (featureName === 'schemes' && this.state.showSchemes) {
-      this.setState({ showSchemes: false });
-    } else if (featureName === 'pests' && this.state.showPestGuide) {
-      this.setState({ showPestGuide: false });
-    } else if (featureName === 'forum' && this.state.showForum) {
-      this.setState({ showForum: false });
-    } else if (featureName === 'loan' && this.state.showLoanCalculator) {
-      this.setState({ showLoanCalculator: false });
-    } else if (featureName === 'forecast' && this.state.showForecast) {
-      this.setState({ showForecast: false });
-    } else {
-      // Hide all and show only the clicked one
-      this.setState({
+    if (currentFeature === featureName) {
+      this.setState({ 
+        activeFeature: null,
         showCropCalendar: false,
         showSchemes: false,
         showPestGuide: false,
         showForum: false,
         showLoanCalculator: false,
-        showForecast: false,
-        ...featureStates
+        showForecast: false
+      });
+    } else {
+      this.setState({
+        activeFeature: featureName,
+        showCropCalendar: featureName === 'calendar',
+        showSchemes: featureName === 'schemes',
+        showPestGuide: featureName === 'pests',
+        showForum: featureName === 'forum',
+        showLoanCalculator: featureName === 'loan',
+        showForecast: featureName === 'forecast'
       });
     }
   };
@@ -347,9 +383,8 @@ class Home extends Component {
   };
 
   render() {
-    const { searchInput, weather, locationError, isLoading, tipOfTheDay, marketSellPrices, marketBuyPrices, isMarketLoading, pestAlerts, landTypes, selectedLand, sustainabilityMetrics, aiAdvice, activeTab, districts, selectedDistrict, showLocationModal, userLocation, cropCalendar, showCropCalendar, governmentSchemes, showSchemes, pestGuide, showPestGuide, forumPosts, showForum, loanAmount, interestRate, loanPeriod, loanResult, showLoanCalculator, weatherForecast, showForecast } = this.state;
+    const { searchInput, weather, locationError, isLoading, tipOfTheDay, marketSellPrices, marketBuyPrices, isMarketLoading, pestAlerts, landTypes, selectedLand, sustainabilityMetrics, aiAdvice, activeTab, districts, selectedDistrict, showLocationModal, userLocation, cropCalendar, showCropCalendar, governmentSchemes, showSchemes, pestGuide, showPestGuide, forumPosts, showForum, loanAmount, interestRate, loanPeriod, loanResult, showLoanCalculator, weatherForecast, showForecast, cropListings, showUploadForm, newCrop } = this.state;
     
-
     return (
       <div className="home-container">
         <header className="header">
@@ -424,50 +459,13 @@ class Home extends Component {
             )}
           </div>
 
-          {/* Feature Buttons */}
           <div className="feature-buttons">
-            <button 
-              className={`feature-btn ${this.state.activeFeature === 'calendar' ? 'active' : ''}`}
-              onClick={() => this.toggleFeature('calendar')}
-              disabled={this.state.activeFeature && this.state.activeFeature !== 'calendar'}
-            >
-              📅 Calendar
-            </button>
-            <button 
-              className={`feature-btn ${this.state.activeFeature === 'schemes' ? 'active' : ''}`}
-              onClick={() => this.toggleFeature('schemes')}
-              disabled={this.state.activeFeature && this.state.activeFeature !== 'schemes'}
-            >
-              🏛️ Schemes
-            </button>
-            <button 
-              className={`feature-btn ${this.state.activeFeature === 'pests' ? 'active' : ''}`}
-              onClick={() => this.toggleFeature('pests')}
-              disabled={this.state.activeFeature && this.state.activeFeature !== 'pests'}
-            >
-              🐛 Pests
-            </button>
-            <button 
-              className={`feature-btn ${this.state.activeFeature === 'forum' ? 'active' : ''}`}
-              onClick={() => this.toggleFeature('forum')}
-              disabled={this.state.activeFeature && this.state.activeFeature !== 'forum'}
-            >
-              💬 Forum
-            </button>
-            <button 
-              className={`feature-btn ${this.state.activeFeature === 'loan' ? 'active' : ''}`}
-              onClick={() => this.toggleFeature('loan')}
-              disabled={this.state.activeFeature && this.state.activeFeature !== 'loan'}
-            >
-              💰 Loan
-            </button>
-            <button 
-              className={`feature-btn ${this.state.activeFeature === 'forecast' ? 'active' : ''}`}
-              onClick={() => this.toggleFeature('forecast')}
-              disabled={this.state.activeFeature && this.state.activeFeature !== 'forecast'}
-            >
-              🌤️ Forecast
-            </button>
+            <button className={`feature-btn ${this.state.activeFeature === 'calendar' ? 'active' : ''}`} onClick={() => this.toggleFeature('calendar')} disabled={this.state.activeFeature && this.state.activeFeature !== 'calendar'}>📅 Calendar</button>
+            <button className={`feature-btn ${this.state.activeFeature === 'schemes' ? 'active' : ''}`} onClick={() => this.toggleFeature('schemes')} disabled={this.state.activeFeature && this.state.activeFeature !== 'schemes'}>🏛️ Schemes</button>
+            <button className={`feature-btn ${this.state.activeFeature === 'pests' ? 'active' : ''}`} onClick={() => this.toggleFeature('pests')} disabled={this.state.activeFeature && this.state.activeFeature !== 'pests'}>🐛 Pests</button>
+            <button className={`feature-btn ${this.state.activeFeature === 'forum' ? 'active' : ''}`} onClick={() => this.toggleFeature('forum')} disabled={this.state.activeFeature && this.state.activeFeature !== 'forum'}>💬 Forum</button>
+            <button className={`feature-btn ${this.state.activeFeature === 'loan' ? 'active' : ''}`} onClick={() => this.toggleFeature('loan')} disabled={this.state.activeFeature && this.state.activeFeature !== 'loan'}>💰 Loan</button>
+            <button className={`feature-btn ${this.state.activeFeature === 'forecast' ? 'active' : ''}`} onClick={() => this.toggleFeature('forecast')} disabled={this.state.activeFeature && this.state.activeFeature !== 'forecast'}>🌤️ Forecast</button>
           </div>
 
           {showCropCalendar && (
@@ -502,7 +500,7 @@ class Home extends Component {
                       <p><strong>Eligibility:</strong> {scheme.eligibility}</p>
                       <p><strong>Benefits:</strong> {scheme.benefits}</p>
                     </div>
-                    <button className="scheme-apply">Apply Now</button>
+                    <button className="scheme-apply" onClick={() => this.handleApplyNow(scheme.url)}>Apply Now</button>
                   </div>
                 ))}
               </div>
@@ -525,17 +523,13 @@ class Home extends Component {
                     <div className="pest-section">
                       <h4>Affects Crops:</h4>
                       <ul className="pest-list">
-                        {pest.crops.map((crop, index) => (
-                          <li key={index}>{crop}</li>
-                        ))}
+                        {pest.crops.map((crop, index) => (<li key={index}>{crop}</li>))}
                       </ul>
                     </div>
                     <div className="pest-section">
                       <h4>Symptoms:</h4>
                       <ul className="pest-list">
-                        {pest.symptoms.map((symptom, index) => (
-                          <li key={index}>{symptom}</li>
-                        ))}
+                        {pest.symptoms.map((symptom, index) => (<li key={index}>{symptom}</li>))}
                       </ul>
                     </div>
                     <div className="pest-section">
@@ -683,8 +677,113 @@ class Home extends Component {
                   </div>
                 )}
               </div>
+
               <div className="sell-buy">
-                
+                <div className="sell-buy-section">
+                  <div className="sell-buy-header">
+                    <h2>🌾 Buy & Sell Crops</h2>
+                    <button className="upload-btn" onClick={this.toggleUploadForm}>📤 Upload Your Crops</button>
+                  </div>
+
+                  {showUploadForm && (
+                    <div className="upload-form-modal">
+                      <div className="upload-form-content">
+                        <h3>Upload Your Crop</h3>
+                        <form onSubmit={this.handleCropSubmit}>
+                          <div className="form-row">
+                            <div className="form-group">
+                              <label>Crop Name *</label>
+                              <select name="crop" value={newCrop.crop} onChange={this.handleInputChange} required>
+                                <option value="">Select Crop</option>
+                                <option value="Cotton">Cotton</option>
+                                <option value="Chilli">Chilli</option>
+                                <option value="Maize">Maize</option>
+                                <option value="Paddy">Paddy</option>
+                                <option value="Groundnut">Groundnut</option>
+                                <option value="Sugarcane">Sugarcane</option>
+                                <option value="Wheat">Wheat</option>
+                                <option value="Tomato">Tomato</option>
+                                <option value="Potato">Potato</option>
+                                <option value="Onion">Onion</option>
+                              </select>
+                            </div>
+                            <div className="form-group">
+                              <label>Quantity *</label>
+                              <input type="text" name="quantity" value={newCrop.quantity} onChange={this.handleInputChange} placeholder="e.g., 500 kg" required />
+                            </div>
+                          </div>
+                          <div className="form-row">
+                            <div className="form-group">
+                              <label>Price *</label>
+                              <input type="text" name="price" value={newCrop.price} onChange={this.handleInputChange} placeholder="e.g., ₹70/kg" required />
+                            </div>
+                            <div className="form-group">
+                              <label>Your Name *</label>
+                              <input type="text" name="farmer" value={newCrop.farmer} onChange={this.handleInputChange} placeholder="Enter your name" required />
+                            </div>
+                          </div>
+                          <div className="form-row">
+                            <div className="form-group">
+                              <label>Phone Number *</label>
+                              <input type="tel" name="phone" value={newCrop.phone} onChange={this.handleInputChange} placeholder="+91 98765 43210" required />
+                            </div>
+                            <div className="form-group">
+                              <label>Email</label>
+                              <input type="email" name="email" value={newCrop.email} onChange={this.handleInputChange} placeholder="your.email@farm.com" />
+                            </div>
+                          </div>
+                          <div className="form-group">
+                            <label>Location *</label>
+                            <input type="text" name="location" value={newCrop.location} onChange={this.handleInputChange} placeholder="e.g., Chengalpattu, Tamil Nadu" required />
+                          </div>
+                          <div className="form-group">
+                            <label>Description</label>
+                            <textarea name="description" value={newCrop.description} onChange={this.handleInputChange} placeholder="Describe your crop quality, harvest date, etc." rows="3"></textarea>
+                          </div>
+                          <div className="form-buttons">
+                            <button type="button" className="btn-cancel" onClick={this.toggleUploadForm}>Cancel</button>
+                            <button type="submit" className="btn-submit">Upload Crop</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="crop-listings-grid">
+                    {cropListings.map((listing) => (
+                      <div key={listing.id} className="crop-listing-card">
+                        <div className="crop-card-header">
+                          <span className="crop-icon-large">{listing.image}</span>
+                          <div className="crop-card-title">
+                            <h3>{listing.crop}</h3>
+                            <p className="crop-location">📍 {listing.location}</p>
+                          </div>
+                        </div>
+                        <div className="crop-card-details">
+                          <div className="detail-row">
+                            <span className="detail-label">Quantity:</span>
+                            <span className="detail-value">{listing.quantity}</span>
+                          </div>
+                          <div className="detail-row">
+                            <span className="detail-label">Price:</span>
+                            <span className="detail-value price-highlight">{listing.price}</span>
+                          </div>
+                          <div className="detail-row">
+                            <span className="detail-label">Farmer:</span>
+                            <span className="detail-value">{listing.farmer}</span>
+                          </div>
+                        </div>
+                        <div className="crop-description">
+                          <p>{listing.description}</p>
+                        </div>
+                        <div className="crop-card-actions">
+                          <button className="contact-btn" onClick={() => this.handleContactFarmer(listing.email, listing.crop)}>{listing.email}📧 Contact Farmer</button>
+                          <button className="call-btn" onClick={() => this.handleCallFarmer(listing.phone)}>{listing.phone}☎️ Call Now</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           )}
@@ -700,42 +799,41 @@ class Home extends Component {
                       <div key={land.id} className={`land-type-card ${selectedLand?.id === land.id ? 'active' : ''}`} onClick={() => this.selectLand(land)}>
                         <span className="land-icon">{land.icon}</span>
                         <h4>{land.name}</h4>
-                        <p className="land-status" style={{ color: this.getStatusColor(land.status) }}>{land.status}</p>
                       </div>
                     ))}
                   </div>
                 </div>
+
                 {selectedLand && (
-                  <div className="land-info-container">
-                    <div className="land-info-header">
-                      <h3>{selectedLand.icon} {selectedLand.name}</h3>
-                    </div>
-                    <div className="soil-properties">
-                      <h4>🧪 Soil Properties</h4>
-                      <div className="properties-grid">
-                        <div className="property-item"><span className="prop-label">pH Level:</span><span className="prop-value">{selectedLand.pH}</span></div>
-                        <div className="property-item"><span className="prop-label">Moisture:</span><span className="prop-value">{selectedLand.moisture}</span></div>
-                        <div className="property-item"><span className="prop-label">Drainage:</span><span className="prop-value">{selectedLand.drainage}</span></div>
-                        <div className="property-item"><span className="prop-label">Fertility:</span><span className="prop-value">{selectedLand.fertility}</span></div>
+                  <div className="land-details">
+                    <h3>Details for {selectedLand.name}</h3>
+                    <div className="land-info-grid">
+                      <div className="info-card">
+                        <h4>Soil Properties</h4>
+                        <p><strong>pH Level:</strong> {selectedLand.pH}</p>
+                        <p><strong>Moisture:</strong> {selectedLand.moisture}</p>
+                        <p><strong>Drainage:</strong> {selectedLand.drainage}</p>
+                        <p><strong>Fertility:</strong> {selectedLand.fertility}</p>
                       </div>
-                    </div>
-                    <div className="requirements-section">
-                      <h4>📋 Environmental Requirements</h4>
-                      <div className="requirements-grid">
-                        <div className="requirement-item"><span className="req-icon">🌧️</span><span className="req-label">Rainfall:</span><span className="req-value">{selectedLand.requirements.rainfall}</span></div>
-                        <div className="requirement-item"><span className="req-icon">🌡️</span><span className="req-label">Temperature:</span><span className="req-value">{selectedLand.requirements.temperature}</span></div>
-                        <div className="requirement-item"><span className="req-icon">📏</span><span className="req-label">Soil Depth:</span><span className="req-value">{selectedLand.requirements.depth}</span></div>
-                        <div className="requirement-item"><span className="req-icon">🌿</span><span className="req-label">Organic Matter:</span><span className="req-value">{selectedLand.requirements.organic}</span></div>
+                      <div className="info-card">
+                        <h4>Requirements</h4>
+                        <p><strong>Rainfall:</strong> {selectedLand.requirements.rainfall}</p>
+                        <p><strong>Temperature:</strong> {selectedLand.requirements.temperature}</p>
+                        <p><strong>Depth:</strong> {selectedLand.requirements.depth}</p>
+                        <p><strong>Organic Matter:</strong> {selectedLand.requirements.organic}</p>
+                      </div>
+                      <div className="info-card">
+                        <h4>Farming Schedule</h4>
+                        <p><strong>Last Harvest:</strong> {selectedLand.lastHarvest}</p>
+                        <p><strong>Next Planting:</strong> {selectedLand.nextPlanting}</p>
+                        <p><strong>Status:</strong> <span style={{ color: this.getStatusColor(selectedLand.status) }}>{selectedLand.status}</span></p>
                       </div>
                     </div>
                     <div className="suitable-crops">
-                      <h4>🌾 Suitable Crops</h4>
+                      <h4>Suitable Crops:</h4>
                       <div className="crops-list">
                         {selectedLand.suitableCrops.map((crop, index) => (
-                          <div key={index} className="crop-badge">
-                            <span className="crop-check">✓</span>
-                            {crop}
-                          </div>
+                          <span key={index} className="crop-badge">{crop}</span>
                         ))}
                       </div>
                     </div>
@@ -749,29 +847,25 @@ class Home extends Component {
             <div className="tab-content">
               <div className="sustainability-section">
                 <h2>🌱 Sustainability Metrics</h2>
-                <p>Track your farm's environmental impact</p>
-                <div className="sustainability-grid">
+                <div className="metrics-grid">
                   {sustainabilityMetrics.map((metric, index) => (
-                    <div key={index} className="sustainability-card">
-                      <div className="sustainability-header">
-                        <span className="sustainability-label">{metric.label}</span>
-                        <span className="sustainability-value" style={{ color: this.getStatusColor(metric.status) }}>{metric.value} {metric.unit}</span>
+                    <div key={index} className="metric-card">
+                      <h4>{metric.label}</h4>
+                      <div className="metric-value" style={{ color: this.getStatusColor(metric.status) }}>
+                        {metric.value} {metric.unit}
                       </div>
+                      <div className="metric-target">Target: {metric.target} {metric.unit}</div>
                       <div className="progress-bar">
-                        <div className="progress-fill" style={{ width: `${metric.unit === '%' ? metric.value : (metric.value / metric.target) * 100}%`, backgroundColor: this.getStatusColor(metric.status) }}></div>
+                        <div 
+                          className="progress-fill" 
+                          style={{ 
+                            width: `${(metric.value / metric.target) * 100}%`,
+                            backgroundColor: this.getStatusColor(metric.status)
+                          }}
+                        ></div>
                       </div>
-                      <p className="target-text">Target: {metric.target} {metric.unit}</p>
                     </div>
                   ))}
-                </div>
-                <div className="tips-section">
-                  <h3>💧 Water Conservation Tips</h3>
-                  <div className="tips-grid">
-                    <div className="tip-card"><h4>Drip Irrigation</h4><p>Save up to 70% water compared to traditional methods.</p></div>
-                    <div className="tip-card"><h4>Rainwater Harvesting</h4><p>Collect and store rainwater for dry periods.</p></div>
-                    <div className="tip-card"><h4>Mulching</h4><p>Reduce evaporation by up to 50% with proper mulching.</p></div>
-                    <div className="tip-card"><h4>Smart Scheduling</h4><p>Water during early morning or late evening.</p></div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -779,12 +873,11 @@ class Home extends Component {
 
           {activeTab === 'ai' && (
             <div className="tab-content">
-              <div className="ai-section">
-                <h2>🤖 AI-Powered Farming Assistant</h2>
-                <p>Personalized recommendations based on your farm data</p>
-                <div className="advice-grid">
+              <div className="ai-assistant-section">
+                <h2>🤖 AI-Powered Farming Advice</h2>
+                <div className="ai-advice-grid">
                   {aiAdvice.map((advice) => (
-                    <div key={advice.id} className="advice-card" style={{ borderLeft: `4px solid ${this.getPriorityColor(advice.priority)}` }}>
+                    <div key={advice.id} className="advice-card">
                       <div className="advice-header">
                         <h4>{advice.title}</h4>
                         <span className="priority-badge" style={{ backgroundColor: this.getPriorityColor(advice.priority) }}>{advice.priority}</span>

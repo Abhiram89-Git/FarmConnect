@@ -72,7 +72,8 @@ class Home extends Component {
     weatherForecast: [],
     showForecast: false,
     activeFeature: null,
-    activeTab: 'overview'
+    activeTab: 'overview',
+    darkMode: false
   };
 
   componentDidMount() {
@@ -85,6 +86,11 @@ class Home extends Component {
     this.initializePestGuide();
     this.initializeForumPosts();
     this.initializeWeatherForecast();
+    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    this.setState({ darkMode: savedDarkMode });
+    if (savedDarkMode) {
+      document.body.classList.add('dark-mode');
+    }
   }
 
   componentWillUnmount() {
@@ -382,8 +388,25 @@ class Home extends Component {
     }
   };
 
+  toggleDarkMode = () => {
+    this.setState(prevState => {
+      const newDarkMode = !prevState.darkMode;
+      localStorage.setItem('darkMode', newDarkMode);
+      
+      if (newDarkMode) {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+      
+      return { darkMode: newDarkMode };
+    });
+  };
+
   render() {
-    const { searchInput, weather, locationError, isLoading, tipOfTheDay, marketSellPrices, marketBuyPrices, isMarketLoading, pestAlerts, landTypes, selectedLand, sustainabilityMetrics, aiAdvice, activeTab, districts, selectedDistrict, showLocationModal, userLocation, cropCalendar, showCropCalendar, governmentSchemes, showSchemes, pestGuide, showPestGuide, forumPosts, showForum, loanAmount, interestRate, loanPeriod, loanResult, showLoanCalculator, weatherForecast, showForecast, cropListings, showUploadForm, newCrop } = this.state;
+    const { darkMode, searchInput, weather, locationError, isLoading, tipOfTheDay, marketSellPrices, marketBuyPrices, isMarketLoading, pestAlerts, landTypes, selectedLand, sustainabilityMetrics, aiAdvice, activeTab, districts, selectedDistrict, showLocationModal, userLocation, cropCalendar, showCropCalendar, governmentSchemes, showSchemes, pestGuide, showPestGuide, forumPosts, showForum, loanAmount, interestRate, loanPeriod, loanResult, showLoanCalculator, weatherForecast, showForecast, cropListings, showUploadForm, newCrop } = this.state;
+    
+    const currentPath = window.location.pathname;
     
     return (
       <div className="home-container">
@@ -396,6 +419,9 @@ class Home extends Component {
             <input type="search" value={searchInput} onChange={this.onSearch} placeholder="Search here..." />
             <BiSearch className="search-icon" />
           </div>
+          <button className="dark-mode-toggle" onClick={this.toggleDarkMode} title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}>
+            {darkMode ? '☀️' : '🌙'}
+          </button>
         </header>
 
         {showLocationModal && (
@@ -777,8 +803,8 @@ class Home extends Component {
                           <p>{listing.description}</p>
                         </div>
                         <div className="crop-card-actions">
-                          <button className="contact-btn" onClick={() => this.handleContactFarmer(listing.email, listing.crop)}>{listing.email}📧 Contact Farmer</button>
-                          <button className="call-btn" onClick={() => this.handleCallFarmer(listing.phone)}>{listing.phone}☎️ Call Now</button>
+                          <button className="contact-btn" onClick={() => this.handleContactFarmer(listing.email, listing.crop)}>📧 Contact</button>
+                          <button className="call-btn" onClick={() => this.handleCallFarmer(listing.phone)}>☎️ Call</button>
                         </div>
                       </div>
                     ))}
@@ -899,6 +925,36 @@ class Home extends Component {
           <Link to="/irrigation"><button>Irrigation</button></Link>
           <Link to="/crops"><button>Crops</button></Link>
         </footer>
+
+        {/* Mobile Navigation Bar */}
+        <nav className="mobile-nav">
+          <div className="mobile-nav-grid">
+            <Link to="/" className={`mobile-nav-item ${currentPath === '/' ? 'active' : ''}`}>
+              <span className="mobile-nav-icon">🏠</span>
+              <span className="mobile-nav-label">Home</span>
+            </Link>
+            <Link to="/animals" className={`mobile-nav-item ${currentPath === '/animals' ? 'active' : ''}`}>
+              <span className="mobile-nav-icon">🐄</span>
+              <span className="mobile-nav-label">Animals</span>
+            </Link>
+            <Link to="/plants" className={`mobile-nav-item ${currentPath === '/plants' ? 'active' : ''}`}>
+              <span className="mobile-nav-icon">🌱</span>
+              <span className="mobile-nav-label">Plants</span>
+            </Link>
+            <Link to="/tools" className={`mobile-nav-item ${currentPath === '/tools' ? 'active' : ''}`}>
+              <span className="mobile-nav-icon">🔧</span>
+              <span className="mobile-nav-label">Tools</span>
+            </Link>
+            <Link to="/irrigation" className={`mobile-nav-item ${currentPath === '/irrigation' ? 'active' : ''}`}>
+              <span className="mobile-nav-icon">💧</span>
+              <span className="mobile-nav-label">Irrigation</span>
+            </Link>
+            <Link to="/crops" className={`mobile-nav-item ${currentPath === '/crops' ? 'active' : ''}`}>
+              <span className="mobile-nav-icon">🌾</span>
+              <span className="mobile-nav-label">Crops</span>
+            </Link>
+          </div>
+        </nav>
       </div>
     );
   }

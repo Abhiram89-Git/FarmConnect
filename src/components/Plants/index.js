@@ -472,6 +472,7 @@ class Plants extends Component {
     }
 
     const categories = ['All', ...new Set(plantlist.map(plant => plant.type))]
+    const currentPath = window.location.pathname
 
     return (
       <div className='plant'>
@@ -614,6 +615,7 @@ class Plants extends Component {
           )}
         </div>
 
+        {/* Desktop Footer */}
         <footer className='footer'>
           <Link to='/'><button>Home</button></Link>
           <Link to='/animals'><button>Animals</button></Link>
@@ -622,6 +624,36 @@ class Plants extends Component {
           <Link to='/irrigation'><button>Irrigation</button></Link>
           <Link to='/crops'><button>Crops</button></Link>
         </footer>
+
+        {/* Mobile Navigation Bar */}
+        <nav className="mobile-nav">
+          <div className="mobile-nav-grid">
+            <Link to="/" className={`mobile-nav-item ${currentPath === '/' ? 'active' : ''}`}>
+              <span className="mobile-nav-icon">🏠</span>
+              <span className="mobile-nav-label">Home</span>
+            </Link>
+            <Link to="/animals" className={`mobile-nav-item ${currentPath === '/animals' ? 'active' : ''}`}>
+              <span className="mobile-nav-icon">🐄</span>
+              <span className="mobile-nav-label">Animals</span>
+            </Link>
+            <Link to="/plants" className={`mobile-nav-item ${currentPath === '/plants' ? 'active' : ''}`}>
+              <span className="mobile-nav-icon">🌱</span>
+              <span className="mobile-nav-label">Plants</span>
+            </Link>
+            <Link to="/tools" className={`mobile-nav-item ${currentPath === '/tools' ? 'active' : ''}`}>
+              <span className="mobile-nav-icon">🔧</span>
+              <span className="mobile-nav-label">Tools</span>
+            </Link>
+            <Link to="/irrigation" className={`mobile-nav-item ${currentPath === '/irrigation' ? 'active' : ''}`}>
+              <span className="mobile-nav-icon">💧</span>
+              <span className="mobile-nav-label">Irrigation</span>
+            </Link>
+            <Link to="/crops" className={`mobile-nav-item ${currentPath === '/crops' ? 'active' : ''}`}>
+              <span className="mobile-nav-icon">🌾</span>
+              <span className="mobile-nav-label">Crops</span>
+            </Link>
+          </div>
+        </nav>
       </div>
     )
   }

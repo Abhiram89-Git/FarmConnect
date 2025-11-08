@@ -2,7 +2,6 @@ import './index.css';
 import { Component } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
-// NEW: Import icons for the simple feature bar
 import { FaFilter, FaRedo } from 'react-icons/fa';
 
 // Forming Tools Data
@@ -125,7 +124,6 @@ const tractorData = {
     ]
 };
 
-// MODIFIED: Expanded data for simple categorization
 const toolslist = [
     { id: 1, name: 'Shovel', type: 'Manual' },
     { id: 2, name: 'Hoe', type: 'Manual' },
@@ -138,34 +136,29 @@ const toolslist = [
 ];
 
 class Tools extends Component {
-    // MODIFIED: Added state for category filter
     state = { 
         searchInput: '', 
-        selectedCategory: 'All', // Default category
-        showTractor: false, // NEW: Tractor toggle state
-        showFormingTools: false // NEW: Forming Tools toggle state
+        selectedCategory: 'All',
+        showTractor: false,
+        showFormingTools: false
     };
 
     onSearch = (event) => {
         this.setState({ searchInput: event.target.value });
     };
 
-    // NEW: Handler to set the category filter
     onFilterChange = (category) => {
         this.setState({ selectedCategory: category, searchInput: '' });
     };
 
-    // NEW: Handler to clear all filters
     onClearFilters = () => {
         this.setState({ selectedCategory: 'All', searchInput: '' });
     };
 
-    // NEW: Handler to toggle tractor section
     toggleTractor = () => {
         this.setState(prevState => ({ showTractor: !prevState.showTractor }));
     };
 
-    // NEW: Handler to toggle forming tools section
     toggleFormingTools = () => {
         this.setState(prevState => ({ showFormingTools: !prevState.showFormingTools }));
     };
@@ -173,17 +166,14 @@ class Tools extends Component {
     render() {
         const { searchInput, selectedCategory, showTractor, showFormingTools } = this.state;
 
-        // MODIFIED: Filtering logic now includes category filter
         const filteredTools = toolslist.filter(each => {
             const matchesSearch = each.name.toLowerCase().includes(searchInput.trim().toLowerCase());
-            // Check if the item's type matches the selected category, or if 'All' is selected
             const matchesCategory = selectedCategory === 'All' || each.type === selectedCategory;
-            
             return matchesSearch && matchesCategory;
         });
 
-        // NEW: Get unique categories for the filter buttons
         const categories = ['All', ...new Set(toolslist.map(tool => tool.type))];
+        const currentPath = window.location.pathname;
 
         return (
             <div className='tool'>
@@ -208,7 +198,6 @@ class Tools extends Component {
                     </div>
                 </header>
 
-                {/* NEW FEATURE BAR: Category Filters and Clear Button */}
                 <div className='filter-bar'>
                     <span className='filter-label'><FaFilter /> Filter By:</span>
                     {categories.map(category => (
@@ -224,7 +213,6 @@ class Tools extends Component {
                         <FaRedo /> Clear
                     </button>
                 </div>
-                {/* END NEW FEATURE BAR */}
 
                 <ul className='tool-list'>
                     {filteredTools.length > 0 ? (
@@ -240,7 +228,7 @@ class Tools extends Component {
                     )}
                 </ul>
 
-                {/* NEW: FORMING TOOLS SECTION */}
+                {/* FORMING TOOLS SECTION */}
                 <div className='forming-tools-container'>
                     <button className='forming-tools-toggle-btn' onClick={this.toggleFormingTools}>
                         🛠️ Forming Tools Details {showFormingTools ? '▼' : '▶'}
@@ -281,7 +269,6 @@ class Tools extends Component {
                         </div>
                     )}
                 </div>
-                {/* END FORMING TOOLS SECTION */}
 
                 {/* TRACTOR SECTION */}
                 <div className='tractor-container'>
@@ -324,8 +311,8 @@ class Tools extends Component {
                         </div>
                     )}
                 </div>
-                {/* END TRACTOR SECTION */}
 
+                {/* Desktop Footer */}
                 <footer className="footer">
                     <Link to='/'><button>Home</button></Link>
                     <Link to='/animals'><button>Animals</button></Link>
@@ -334,6 +321,36 @@ class Tools extends Component {
                     <Link to='/irrigation'><button>Irrigation</button></Link>
                     <Link to='/crops'><button>Crops</button></Link>
                 </footer>
+
+                {/* Mobile Navigation Bar */}
+                <nav className="mobile-nav">
+                    <div className="mobile-nav-grid">
+                        <Link to="/" className={`mobile-nav-item ${currentPath === '/' ? 'active' : ''}`}>
+                            <span className="mobile-nav-icon">🏠</span>
+                            <span className="mobile-nav-label">Home</span>
+                        </Link>
+                        <Link to="/animals" className={`mobile-nav-item ${currentPath === '/animals' ? 'active' : ''}`}>
+                            <span className="mobile-nav-icon">🐄</span>
+                            <span className="mobile-nav-label">Animals</span>
+                        </Link>
+                        <Link to="/plants" className={`mobile-nav-item ${currentPath === '/plants' ? 'active' : ''}`}>
+                            <span className="mobile-nav-icon">🌱</span>
+                            <span className="mobile-nav-label">Plants</span>
+                        </Link>
+                        <Link to="/tools" className={`mobile-nav-item ${currentPath === '/tools' ? 'active' : ''}`}>
+                            <span className="mobile-nav-icon">🔧</span>
+                            <span className="mobile-nav-label">Tools</span>
+                        </Link>
+                        <Link to="/irrigation" className={`mobile-nav-item ${currentPath === '/irrigation' ? 'active' : ''}`}>
+                            <span className="mobile-nav-icon">💧</span>
+                            <span className="mobile-nav-label">Irrigation</span>
+                        </Link>
+                        <Link to="/crops" className={`mobile-nav-item ${currentPath === '/crops' ? 'active' : ''}`}>
+                            <span className="mobile-nav-icon">🌾</span>
+                            <span className="mobile-nav-label">Crops</span>
+                        </Link>
+                    </div>
+                </nav>
             </div>
         );
     }

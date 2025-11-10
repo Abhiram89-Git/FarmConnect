@@ -73,8 +73,19 @@ class Home extends Component {
     showForecast: false,
     activeFeature: null,
     activeTab: 'overview',
-    darkMode: false
+    darkMode: false,
+    isAIChatOpen: false,
+    aiMessages: [
+      {
+        role: 'assistant',
+        content: 'Hello! I\'m your Farm AI Assistant. Ask me anything about farming, crops, weather, market prices, or agricultural practices.'
+      }
+    ],
+    aiInput: '',
+    isAILoading: false
   };
+
+  aiMessagesEndRef = null;
 
   componentDidMount() {
     this.startWatchingLocation();
@@ -93,11 +104,291 @@ class Home extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.aiMessages.length !== this.state.aiMessages.length) {
+      this.scrollAIToBottom();
+    }
+  }
+
   componentWillUnmount() {
     if (this.watchId) {
       navigator.geolocation.clearWatch(this.watchId);
     }
   }
+
+  scrollAIToBottom = () => {
+    if (this.aiMessagesEndRef) {
+      this.aiMessagesEndRef.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  handleAISubmit = async () => {
+    const { aiInput, isAILoading } = this.state;
+    if (!aiInput.trim() || isAILoading) return;
+
+    const userMessage = aiInput.trim();
+    this.setState({ aiInput: '' });
+    
+    this.setState(prevState => ({
+      aiMessages: [...prevState.aiMessages, { role: 'user', content: userMessage }],
+      isAILoading: true
+    }));
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1024,
+          messages: [
+            {
+              role: 'user',
+              content: `You are an expert agricultural assistant with deep knowledge of farming practices in India, especially Tamil Nadu. You help farmers with:
+- Crop cultivation and planning
+- Pest and disease management
+- Soil health and fertilizers
+- Irrigation techniques
+- Weather-based advice
+- Market information
+- Government schemes
+
+Provide practical, actionable advice in a friendly tone. Keep responses clear and concise (2-4 paragraphs).
+
+Farmer's question: ${userMessage}`
+            }
+          ]
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`API returned status ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.content && Array.isArray(data.content) && data.content.length > 0) {
+        const assistantMessage = data.content
+          .filter(item => item.type === 'text')
+          .map(item => item.text)
+          .join('\n\n');
+        
+        this.setState(prevState => ({
+          aiMessages: [...prevState.aiMessages, { role: 'assistant', content: assistantMessage }],
+          isAILoading: false
+        }));
+        return; // Successfully got API response
+      } else {
+        throw new Error('No content in API response');
+      }
+    } catch (error) {
+      console.error('API Error:', error.message);
+      
+      // Fallback: Use a more intelligent rule-based system
+      const lowerMessage = userMessage.toLowerCase();
+      let fallbackMessage = '';
+      
+      // Pest management
+      if (lowerMessage.match(/pest|insect|bug|aphid|worm|caterpillar|whitefly|attack|disease|fungus|rot/i)) {
+        if (lowerMessage.includes('tomato')) {
+          fallbackMessage = `**Tomato Pest Control:**\n\nCommon pests affecting tomatoes include fruit borers, whiteflies, and aphids. For prevention, use yellow sticky traps and maintain proper plant spacing (60x45 cm). Neem oil spray (5ml per liter) applied every 7-10 days works well for most pests.\n\nFor fruit borers specifically, remove infected fruits immediately and use pheromone traps. If chemical control is needed, consult your local agricultural officer for approved pesticides. Always spray during early morning or evening hours.\n\nTo prevent fungal diseases, avoid overhead watering and ensure good air circulation. Remove infected leaves promptly and apply copper-based fungicides if necessary.`;
+        } else {
+          fallbackMessage = `**Integrated Pest Management:**\n\nEffective pest control combines multiple approaches. Start with preventive measures: regular field monitoring, proper spacing, crop rotation, and removing infected plants immediately. These steps can prevent 60-70% of pest problems.\n\nFor organic control, neem oil (5ml/liter water) is effective against soft-bodied insects. Spray early morning or evening. Use pheromone traps for specific pests. Encourage natural predators like ladybugs and lacewings.\n\nIf chemical pesticides are necessary, use them as a last resort. Always follow label instructions, wear protective equipment, and maintain proper waiting periods before harvest. Contact your nearest Krishi Vigyan Kendra for pest identification and specific treatment recommendations.`;
+        }
+      }
+      // Rice cultivation
+      else if (lowerMessage.match(/rice|paddy|kuruvai|samba|thaladi/i)) {
+        fallbackMessage = `**Rice Cultivation in Tamil Nadu:**\n\nTamil Nadu has three main rice seasons: Kuruvai (June-July), Samba (August-September), and Thaladi (December-January). Samba is the main season with highest yields. Choose varieties based on your region - short-duration (110-120 days) or long-duration (140-150 days) varieties.\n\nFor water management, maintain 2-3 inches of standing water during vegetative and flowering stages. Drain fields 10-15 days before harvest to facilitate harvesting and improve grain quality. Practice alternate wetting and drying (AWD) to save 20-30% water without affecting yield.\n\nApply fertilizers in split doses: NPK ratio of 150:50:50 kg/hectare is recommended. Apply 50% nitrogen at planting, 25% at tillering, and 25% at panicle initiation. Mix with zinc sulfate (25 kg/ha) if your soil is deficient. Top-dress with potash at flowering stage for better grain filling.`;
+      }
+      // Irrigation
+      else if (lowerMessage.match(/water|irrigat|drip|spray|flood|moisture/i)) {
+        fallbackMessage = `**Smart Irrigation Practices:**\n\nTiming is crucial for irrigation efficiency. Water early morning (6-8 AM) or evening (4-6 PM) to minimize evaporation losses (up to 40%). Avoid midday watering. Check soil moisture 4-6 inches deep before irrigating - if soil sticks together when squeezed, skip watering.\n\nDrip irrigation is most efficient, saving 40-60% water compared to flood irrigation. Initial cost is ₹35,000-50,000 per acre but government subsidies (up to 50%) are available. Best for vegetables, cotton, sugarcane, and fruit crops. Maintains optimal soil moisture and reduces weed growth.\n\nFor flood irrigation, practice alternate furrow irrigation or check basin method to save water. Sandy soils need frequent light watering (every 3-4 days), while clay soils can go 7-10 days between irrigations. Monitor crop appearance - wilting during early morning indicates water stress.`;
+      }
+      // Fertilizer and nutrients
+      else if (lowerMessage.match(/fertilizer|nutrient|nitrogen|phosphorus|potassium|deficiency|npk|compost|manure/i)) {
+        fallbackMessage = `**Balanced Fertilizer Management:**\n\nStart with soil testing every 2-3 years to know exact nutrient requirements. Government agricultural offices provide free or subsidized soil testing. Based on results, apply fertilizers in correct NPK ratio. Over-fertilization harms soil health and pollutes groundwater.\n\nOrganic sources improve long-term soil health: Apply 5-10 tons of farmyard manure or 2-3 tons of compost per acre before planting. Vermicompost (1-2 tons/acre) provides balanced nutrients. Green manuring with dhaincha or sunhemp adds 40-60 kg nitrogen per acre naturally.\n\nRecognize deficiency symptoms: Yellowing of older leaves indicates nitrogen deficiency, purple/dark leaves suggest phosphorus deficiency, and brown leaf edges show potassium deficiency. Apply appropriate fertilizers in split doses rather than single heavy application for better nutrient uptake and less wastage.`;
+      }
+      // Soil health
+      else if (lowerMessage.match(/soil|fertility|ph|organic|matter|health|test/i)) {
+        fallbackMessage = `**Improving Soil Health:**\n\nSoil pH is fundamental - most crops prefer pH 6.0-7.5. Test pH using simple kits (₹50-100) or free government testing. To increase pH in acidic soils, apply agricultural lime (200-500 kg/acre). To decrease pH in alkaline soils, add sulfur (50-100 kg/acre) or use acidic organic matter.\n\nBuild organic matter through multiple sources: Apply compost (2-3 tons/acre annually), practice crop residue incorporation, use green manure crops during off-season, and add vermicompost. Organic matter improves water retention, nutrient availability, and beneficial microbial activity.\n\nImplement crop rotation to maintain soil fertility: Rotate cereals with legumes (pulses) which fix atmospheric nitrogen. For example: Rice → Blackgram → Rice, or Cotton → Chickpea → Maize. This breaks pest cycles, balances nutrient use, and improves soil structure naturally.`;
+      }
+      // Crop selection and planning
+      else if (lowerMessage.match(/crop|plant|grow|suitable|season|time|when|calendar|planning/i)) {
+        if (lowerMessage.includes('tomato')) {
+          fallbackMessage = `**Tomato Cultivation Guide:**\n\nBest planting season is October-November (Rabi season) in Tamil Nadu for open-field cultivation. Summer cultivation (January-February) is also possible with adequate irrigation. Popular varieties: Arka Vikas (determinate), PKM-1 (heat-tolerant), and Lakshmi (high-yielding).\n\nPrepare raised beds (15-20 cm high) for good drainage. Space plants 60 cm between rows and 45 cm within rows. Apply 20-25 tons of farmyard manure and NPK 100:50:50 kg/acre. Stake plants at 2-3 weeks for support and better fruit quality.\n\nWater regularly but avoid waterlogging. Mulch with rice straw to conserve moisture and prevent fruit rot. Harvest when fruits show full color but are still firm. Expected yield: 15-20 tons per acre. Practice crop rotation - don't grow tomato, potato, or brinjal consecutively as they share pests.`;
+        } else {
+          fallbackMessage = `**Crop Selection for Tamil Nadu:**\n\nChoose crops based on three factors: soil type, water availability, and market demand. Rice and sugarcane need ample water and clay-loam soil. Cotton, groundnut, and millets are drought-resistant, suitable for red soils. Pulses fix nitrogen and improve soil, ideal for rotation.\n\nSeasonal planning: Kharif (June-October) with monsoon - rice, cotton, maize, groundnut. Rabi (October-March) with winter - pulses, oilseeds, vegetables. Summer (March-June) - pulses, vegetables, fodder crops with irrigation. Always check monsoon predictions before finalizing crops.\n\nMarket research is crucial before planting. Check APMC wholesale prices for past 2-3 years. Use government apps like "Kisan Suvidha" and "Agri Market" for real-time prices. Consider government procurement schemes for assured prices - rice, wheat, pulses have Minimum Support Price (MSP) guarantee.`;
+        }
+      }
+      // Weather and climate
+      else if (lowerMessage.match(/weather|rain|monsoon|drought|temperature|climate/i)) {
+        fallbackMessage = `**Weather-Based Farming:**\n\nCheck weather forecasts regularly using apps like IMD Weather, Meghdoot, or Mausam. Plan farm activities based on 7-day forecasts - avoid spraying pesticides before rain, delay harvesting if rain expected, and irrigate based on rainfall predictions.\n\nMonsoon management: Ensure proper drainage to prevent waterlogging. Make bunds around fields to capture rainwater. During deficit monsoon, choose short-duration varieties (90-110 days) and practice mulching to conserve moisture. Store rainwater in farm ponds for supplementary irrigation.\n\nHeat stress management: During summer, provide shade nets for sensitive crops, irrigate more frequently, apply mulch to keep soil cool, and schedule irrigation during evening hours. Cold stress: Cover seedlings during cold nights, delay sowing if frost expected, and choose cold-tolerant varieties for winter crops.`;
+      }
+      // Government schemes
+      else if (lowerMessage.match(/scheme|subsidy|loan|kisan|government|pm-kisan|insurance|credit/i)) {
+        fallbackMessage = `**Government Schemes for Farmers:**\n\n**PM-KISAN**: Direct income support of ₹6,000 per year in three installments for all farmers. Register at https://pmkisan.gov.in with land records and Aadhaar.\n\n**PM Fasal Bima Yojana**: Crop insurance covering losses from natural calamities. Premium is only 1.5-2% of sum insured, rest subsidized by government. Apply through banks or online at https://pmfby.gov.in.\n\n**Kisan Credit Card (KCC)**: Credit up to ₹3 lakh at 7% interest rate for farming expenses. Apply through banks with land documents. **Soil Health Card Scheme**: Free soil testing every 2-3 years. **Drip/Sprinkler Subsidy**: 50-60% subsidy on micro-irrigation systems. Contact your nearest agricultural department office or Krishi Vigyan Kendra (KVK) for application assistance.`;
+      }
+      // Market and prices
+      else if (lowerMessage.match(/market|price|sell|msp|apmc|mandi/i)) {
+        fallbackMessage = `**Agricultural Market Information:**\n\nCheck market prices before harvesting to plan selling strategy. Use these resources: **eNAM portal** (https://enam.gov.in) for nationwide APMC prices, **Agri Market app** for mobile updates, local APMC market yards, and agricultural department websites.\n\nMinimum Support Price (MSP) is available for 23 crops including rice, wheat, pulses, oilseeds, and cotton. Government procures at MSP through FCI and state agencies. Register with procurement centers during harvest season with land documents.\n\nTo get better prices: Grade your produce properly, remove damaged items, clean and dry thoroughly, use proper packaging, and consider collective selling through Farmer Producer Organizations (FPOs) for better bargaining power. Store non-perishable crops if prices are low, but ensure proper storage to prevent losses.`;
+      }
+      // General or unmatched questions
+      else {
+        fallbackMessage = `**Agricultural Guidance:**\n\nFor specific farming advice, I can help with topics like crop cultivation, pest management, irrigation, fertilizers, soil health, weather planning, government schemes, and market information. Please ask about any particular aspect of farming you need help with.\n\n**Quick Tips:**\n• Visit your nearest Krishi Vigyan Kendra (KVK) for hands-on training and demonstrations\n• Join Farmer Producer Organizations (FPOs) in your area for collective benefits\n• Use government apps: Kisan Suvidha, Agri Market, Meghdoot for farming information\n• Maintain farm records (expenses, yields, weather) for better planning\n• Test soil every 2-3 years and follow soil health card recommendations\n\nFeel free to ask specific questions about any crop, pest problem, irrigation method, or farming practice you need help with!`;
+      }
+      
+      this.setState(prevState => ({
+        aiMessages: [...prevState.aiMessages, { 
+          role: 'assistant', 
+          content: fallbackMessage
+        }],
+        isAILoading: false
+      }));
+    }
+  };
+
+  handleAIKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      this.handleAISubmit();
+    }
+  };
+
+  handleQuickQuestion = (question) => {
+    this.setState({ aiInput: question }, () => {
+      this.handleAISubmit();
+    });
+  };
+
+  toggleAIChat = () => {
+    this.setState(prevState => ({ isAIChatOpen: !prevState.isAIChatOpen }));
+  };
+
+  calculateLoan = () => {
+    const principal = parseFloat(this.state.loanAmount) || 0;
+    const rate = parseFloat(this.state.interestRate) || 0;
+    const time = parseFloat(this.state.loanPeriod) || 0;
+
+    if (principal > 0 && rate > 0 && time > 0) {
+      const monthlyRate = rate / 12 / 100;
+      const emi = principal * monthlyRate * Math.pow(1 + monthlyRate, time) / (Math.pow(1 + monthlyRate, time) - 1);
+      
+      this.setState({
+        loanResult: {
+          emi: Math.round(emi),
+          total: Math.round(emi * time),
+          interest: Math.round((emi * time) - principal)
+        }
+      });
+    }
+  };
+
+  startWatchingLocation = () => {
+    if (navigator.geolocation) {
+      this.watchId = navigator.geolocation.watchPosition(this.fetchWeather, this.handleLocationError, { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 });
+    } else {
+      this.setState({ locationError: 'Geolocation not supported' });
+    }
+  };
+
+  refreshWeather = () => {
+    if (navigator.geolocation) {
+      this.setState({ isLoading: true });
+      navigator.geolocation.getCurrentPosition(this.fetchWeather, this.handleLocationError, { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 });
+    }
+  };
+
+  fetchWeather = async (position) => {
+    const { latitude, longitude } = position.coords;
+    const apiKey = 'aacf34f1837d9765f52aa5f899590aad';
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+
+      if (data && data.cod === 200) {
+        const precipitation = (data.rain && data.rain['1h']) ? data.rain['1h'] : (data.rain && data.rain['3h']) ? data.rain['3h'] : 0;
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const newWeather = { location: data.name || 'Unknown Location', temperature: data.main?.temp ?? 'N/A', humidity: data.main?.humidity ?? 'N/A', windSpeed: data.wind?.speed ?? 'N/A', condition: data.weather?.[0]?.main ?? 'N/A', icon: `https://openweathermap.org/img/wn/${data.weather?.[0]?.icon}@2x.png`, precipitation, time };
+        this.setState({ weather: newWeather, locationError: '', isLoading: false });
+        this.checkWeatherAlerts(newWeather);
+      } else {
+        this.setState({ locationError: 'Weather data not available', isLoading: false });
+      }
+    } catch (error) {
+      this.setState({ locationError: 'Unable to fetch weather data', isLoading: false });
+    }
+  };
+
+  handleLocationError = () => {
+    this.setState({ locationError: 'Location access denied or unavailable', isLoading: false });
+  };
+
+  onSearch = (event) => {
+    this.setState({ searchInput: event.target.value });
+  };
+
+  showTipOfTheDay = () => {
+    const tips = ['Use mulch to retain soil moisture.', 'Rotate crops to maintain soil fertility.', 'Water plants early in the morning for best absorption.', 'Use compost instead of chemical fertilizers.', 'Check soil pH regularly for better yield.'];
+    const randomTip = tips[Math.floor(Math.random() * tips.length)];
+    this.setState({ tipOfTheDay: randomTip });
+  };
+
+  checkWeatherAlerts = (weatherData) => {
+    const alerts = [];
+    const { humidity, temperature, condition, precipitation } = weatherData;
+    if (humidity > 85) alerts.push('High humidity! Monitor crops for fungal infections.');
+    if (temperature > 35) alerts.push('Extreme heat warning. Ensure adequate irrigation for crops.');
+    if (condition === 'Rain' && precipitation > 10) alerts.push('Heavy rain expected. Check for potential waterlogging in fields.');
+    this.setState({ pestAlerts: alerts });
+  };
+
+  selectLand = (land) => {
+    this.setState({ selectedLand: land });
+  };
+
+  handleTabChange = (tab) => {
+    this.setState({ activeTab: tab });
+  };
+
+  getPriorityColor = (priority) => {
+    switch (priority) {
+      case 'high': return '#ef4444';
+      case 'medium': return '#f59e0b';
+      case 'low': return '#10b981';
+      default: return '#6b7280';
+    }
+  };
+
+  getStatusColor = (status) => {
+    switch (status) {
+      case 'good': return '#10b981';
+      case 'warning': return '#f59e0b';
+      case 'critical': return '#ef4444';
+      case 'Excellent': return '#10b981';
+      case 'Good': return '#3b82f6';
+      default: return '#6b7280';
+    }
+  };
+
+  toggleDarkMode = () => {
+    this.setState(prevState => {
+      const newDarkMode = !prevState.darkMode;
+      localStorage.setItem('darkMode', newDarkMode);
+      
+      if (newDarkMode) {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+      
+      return { darkMode: newDarkMode };
+    });
+  };
 
   initializeCropCalendar = () => {
     const calendar = [
@@ -281,132 +572,17 @@ class Home extends Component {
     }
   };
 
-  calculateLoan = () => {
-    const principal = parseFloat(this.state.loanAmount) || 0;
-    const rate = parseFloat(this.state.interestRate) || 0;
-    const time = parseFloat(this.state.loanPeriod) || 0;
-
-    if (principal > 0 && rate > 0 && time > 0) {
-      const monthlyRate = rate / 12 / 100;
-      const emi = principal * monthlyRate * Math.pow(1 + monthlyRate, time) / (Math.pow(1 + monthlyRate, time) - 1);
-      this.setState({
-        loanResult: {
-          emi: Math.round(emi),
-          total: Math.round(emi * time),
-          interest: Math.round((emi * time) - principal)
-        }
-      });
-    }
-  };
-
-  startWatchingLocation = () => {
-    if (navigator.geolocation) {
-      this.watchId = navigator.geolocation.watchPosition(this.fetchWeather, this.handleLocationError, { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 });
-    } else {
-      this.setState({ locationError: 'Geolocation not supported' });
-    }
-  };
-
-  refreshWeather = () => {
-    if (navigator.geolocation) {
-      this.setState({ isLoading: true });
-      navigator.geolocation.getCurrentPosition(this.fetchWeather, this.handleLocationError, { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 });
-    }
-  };
-
-  fetchWeather = async (position) => {
-    const { latitude, longitude } = position.coords;
-    const apiKey = 'aacf34f1837d9765f52aa5f899590aad';
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
-
-    try {
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-
-      if (data && data.cod === 200) {
-        const precipitation = (data.rain && data.rain['1h']) ? data.rain['1h'] : (data.rain && data.rain['3h']) ? data.rain['3h'] : 0;
-        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const newWeather = { location: data.name || 'Unknown Location', temperature: data.main?.temp ?? 'N/A', humidity: data.main?.humidity ?? 'N/A', windSpeed: data.wind?.speed ?? 'N/A', condition: data.weather?.[0]?.main ?? 'N/A', icon: `https://openweathermap.org/img/wn/${data.weather?.[0]?.icon}@2x.png`, precipitation, time };
-        this.setState({ weather: newWeather, locationError: '', isLoading: false });
-        this.checkWeatherAlerts(newWeather);
-      } else {
-        this.setState({ locationError: 'Weather data not available', isLoading: false });
-      }
-    } catch (error) {
-      this.setState({ locationError: 'Unable to fetch weather data', isLoading: false });
-    }
-  };
-
-  handleLocationError = () => {
-    this.setState({ locationError: 'Location access denied or unavailable', isLoading: false });
-  };
-
-  onSearch = (event) => {
-    this.setState({ searchInput: event.target.value });
-  };
-
-  showTipOfTheDay = () => {
-    const tips = ['Use mulch to retain soil moisture.', 'Rotate crops to maintain soil fertility.', 'Water plants early in the morning for best absorption.', 'Use compost instead of chemical fertilizers.', 'Check soil pH regularly for better yield.'];
-    const randomTip = tips[Math.floor(Math.random() * tips.length)];
-    this.setState({ tipOfTheDay: randomTip });
-  };
-
-  checkWeatherAlerts = (weatherData) => {
-    const alerts = [];
-    const { humidity, temperature, condition, precipitation } = weatherData;
-    if (humidity > 85) alerts.push('High humidity! Monitor crops for fungal infections.');
-    if (temperature > 35) alerts.push('Extreme heat warning. Ensure adequate irrigation for crops.');
-    if (condition === 'Rain' && precipitation > 10) alerts.push('Heavy rain expected. Check for potential waterlogging in fields.');
-    this.setState({ pestAlerts: alerts });
-  };
-
-  selectLand = (land) => {
-    this.setState({ selectedLand: land });
-  };
-
-  handleTabChange = (tab) => {
-    this.setState({ activeTab: tab });
-  };
-
-  getPriorityColor = (priority) => {
-    switch (priority) {
-      case 'high': return '#ef4444';
-      case 'medium': return '#f59e0b';
-      case 'low': return '#10b981';
-      default: return '#6b7280';
-    }
-  };
-
-  getStatusColor = (status) => {
-    switch (status) {
-      case 'good': return '#10b981';
-      case 'warning': return '#f59e0b';
-      case 'critical': return '#ef4444';
-      case 'Excellent': return '#10b981';
-      case 'Good': return '#3b82f6';
-      default: return '#6b7280';
-    }
-  };
-
-  toggleDarkMode = () => {
-    this.setState(prevState => {
-      const newDarkMode = !prevState.darkMode;
-      localStorage.setItem('darkMode', newDarkMode);
-      
-      if (newDarkMode) {
-        document.body.classList.add('dark-mode');
-      } else {
-        document.body.classList.remove('dark-mode');
-      }
-      
-      return { darkMode: newDarkMode };
-    });
-  };
-
   render() {
-    const { darkMode, searchInput, weather, locationError, isLoading, tipOfTheDay, marketSellPrices, marketBuyPrices, isMarketLoading, pestAlerts, landTypes, selectedLand, sustainabilityMetrics, aiAdvice, activeTab, districts, selectedDistrict, showLocationModal, userLocation, cropCalendar, showCropCalendar, governmentSchemes, showSchemes, pestGuide, showPestGuide, forumPosts, showForum, loanAmount, interestRate, loanPeriod, loanResult, showLoanCalculator, weatherForecast, showForecast, cropListings, showUploadForm, newCrop } = this.state;
+    const { darkMode, searchInput, weather, locationError, isLoading, tipOfTheDay, marketSellPrices, marketBuyPrices, isMarketLoading, pestAlerts, landTypes, selectedLand, sustainabilityMetrics, aiAdvice, activeTab, districts, selectedDistrict, showLocationModal, userLocation, cropCalendar, showCropCalendar, governmentSchemes, showSchemes, pestGuide, showPestGuide, forumPosts, showForum, loanAmount, interestRate, loanPeriod, loanResult, showLoanCalculator, weatherForecast, showForecast, cropListings, showUploadForm, newCrop, isAIChatOpen, aiMessages, aiInput, isAILoading } = this.state;
     
     const currentPath = window.location.pathname;
+
+    const quickQuestions = [
+      "How to prevent pest attacks on tomatoes?",
+      "Best time to plant rice in Tamil Nadu",
+      "How to improve soil fertility naturally?",
+      "What are signs of nitrogen deficiency?"
+    ];
     
     return (
       <div className="home-container">
@@ -420,7 +596,12 @@ class Home extends Component {
             <BiSearch className="search-icon" />
           </div>
           <button className="dark-mode-toggle" onClick={this.toggleDarkMode} title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}>
-            {darkMode ? '☀️' : '🌙'}
+            {darkMode ? <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" className="bi bi-sun" viewBox="0 0 16 16">
+            <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708"/>
+            </svg> : <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-moon-stars" viewBox="0 0 16 16">
+            <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278M4.858 1.311A7.27 7.27 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.32 7.32 0 0 0 5.205-2.162q-.506.063-1.029.063c-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286"/>
+            <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z"/>
+</svg>}
           </button>
         </header>
 
@@ -674,7 +855,6 @@ class Home extends Component {
                         {marketSellPrices.map((item, index) => (
                           <div key={index} className="market-card sell-card">
                             <p className="crop-name"><strong>{item.crop}</strong></p>
-                            <p className="category-label">{item.category}</p>
                             <div className="price-box sell-price-box">
                               <span className="price-value">{item.price}</span>
                             </div>
@@ -691,7 +871,6 @@ class Home extends Component {
                         {marketBuyPrices.map((item, index) => (
                           <div key={index} className="market-card buy-card">
                             <p className="crop-name"><strong>{item.crop}</strong></p>
-                            <p className="category-label">{item.category}</p>
                             <div className="price-box buy-price-box">
                               <span className="price-value">{item.price}</span>
                             </div>
@@ -767,8 +946,8 @@ class Home extends Component {
                             <textarea name="description" value={newCrop.description} onChange={this.handleInputChange} placeholder="Describe your crop quality, harvest date, etc." rows="3"></textarea>
                           </div>
                           <div className="form-buttons">
-                            <button type="button" className="btn-cancel" onClick={this.toggleUploadForm}>Cancel</button>
                             <button type="submit" className="btn-submit">Upload Crop</button>
+                            <button type="button" className="btn-cancel" onClick={this.toggleUploadForm}>Cancel</button>
                           </div>
                         </form>
                       </div>
@@ -926,7 +1105,6 @@ class Home extends Component {
           <Link to="/crops"><button>Crops</button></Link>
         </footer>
 
-        {/* Mobile Navigation Bar */}
         <nav className="mobile-nav">
           <div className="mobile-nav-grid">
             <Link to="/" className={`mobile-nav-item ${currentPath === '/' ? 'active' : ''}`}>
@@ -955,6 +1133,93 @@ class Home extends Component {
             </Link>
           </div>
         </nav>
+
+        {!isAIChatOpen && (
+          <button 
+            className="ai-chat-button" 
+            onClick={this.toggleAIChat}
+            aria-label="Open AI Assistant"
+          >
+            🤖
+          </button>
+        )}
+
+        {isAIChatOpen && (
+          <div className="ai-chat-container">
+            <div className="ai-chat-header">
+              <div className="ai-chat-title">
+                <span>🤖</span>
+                <span>Farm AI Assistant</span>
+              </div>
+              <button 
+                className="ai-chat-close" 
+                onClick={this.toggleAIChat}
+                aria-label="Close chat"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="ai-chat-messages">
+              {aiMessages.map((message, index) => (
+                <div 
+                  key={index} 
+                  className={`ai-message ${message.role}`}
+                >
+                  <div className="ai-message-content">
+                    {message.content}
+                  </div>
+                </div>
+              ))}
+              {isAILoading && (
+                <div className="ai-message assistant">
+                  <div className="ai-loading">
+                    <div className="ai-loading-dot"></div>
+                    <div className="ai-loading-dot"></div>
+                    <div className="ai-loading-dot"></div>
+                  </div>
+                </div>
+              )}
+              <div ref={(el) => { this.aiMessagesEndRef = el; }} />
+            </div>
+
+            {aiMessages.length === 1 && (
+              <div className="ai-quick-questions">
+                {quickQuestions.map((question, index) => (
+                  <button
+                    key={index}
+                    className="ai-quick-question"
+                    onClick={() => this.handleQuickQuestion(question)}
+                  >
+                    {question}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            <div className="ai-chat-input-container">
+              <div className="ai-chat-form">
+                <input
+                  type="text"
+                  className="ai-chat-input"
+                  placeholder="Ask about farming, crops, weather..."
+                  value={aiInput}
+                  onChange={(e) => this.setState({ aiInput: e.target.value })}
+                  onKeyPress={this.handleAIKeyPress}
+                  disabled={isAILoading}
+                />
+                <button
+                  onClick={this.handleAISubmit}
+                  className="ai-chat-send"
+                  disabled={isAILoading || !aiInput.trim()}
+                  aria-label="Send message"
+                >
+                  ➤
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

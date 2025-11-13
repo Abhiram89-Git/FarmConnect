@@ -1,0 +1,568 @@
+/* ===================== MOBILE LOADER - FULL PAGE & BRAND NEW ANIMATIONS ===================== */
+
+
+
+/* Mobile Loader Wrapper - FULL PAGE */
+.mobile-loader-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Mobile Background Gradient */
+.mobile-loader-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  z-index: 1;
+}
+
+/* Mobile Loader Content */
+.mobile-loader-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  text-align: center;
+}
+
+/* ===================== SPINNING SQUARE LOADER ===================== */
+
+.mobile-logo-animated {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 40px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-emoji {
+  font-size: 60px;
+  display: inline-block;
+  animation: mobileRotateSquare 2s linear infinite;
+}
+
+@keyframes mobileRotateSquare {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(90deg) scale(1.1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1);
+  }
+  75% {
+    transform: rotate(270deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+/* Orbiting circles around logo */
+.mobile-logo-animated::before {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border: 2px solid rgba(16, 185, 129, 0.4);
+  border-radius: 50%;
+  animation: mobileOrbit 3s linear infinite;
+}
+
+.mobile-logo-animated::after {
+  content: '';
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border: 2px solid rgba(245, 158, 11, 0.3);
+  border-radius: 50%;
+  animation: mobileOrbit 4s linear infinite reverse;
+}
+
+@keyframes mobileOrbit {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===================== MOBILE TITLE - WAVE EFFECT ===================== */
+
+.mobile-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 30px;
+  letter-spacing: 3px;
+  animation: mobileTitleWave 0.6s ease-in-out;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  word-spacing: 2px;
+}
+
+@keyframes mobileTitleWave {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    letter-spacing: 0px;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 3px;
+  }
+}
+
+/* ===================== ANIMATED LOADING DOTS - BOUNCING STYLE ===================== */
+
+.mobile-animated-bars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 50px;
+  margin: 30px 0;
+  width: 100%;
+}
+
+.bar-item {
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  animation: mobileBounceDot 0.8s ease-in-out infinite;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+}
+
+.bar-item:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.bar-item:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.bar-item:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.bar-item:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+.bar-item:nth-child(5) {
+  animation-delay: 0.4s;
+}
+
+.bar-item:nth-child(6) {
+  animation-delay: 0.5s;
+}
+
+.bar-item:nth-child(7) {
+  animation-delay: 0.6s;
+}
+
+.bar-item:nth-child(8) {
+  animation-delay: 0.7s;
+}
+
+@keyframes mobileBounceDot {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-20px) scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* ===================== SUBTITLE - TYPING EFFECT ===================== */
+
+.mobile-subtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 25px 0;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  height: 20px;
+  overflow: hidden;
+}
+
+.mobile-subtitle::after {
+  content: '';
+  animation: mobileTyping 2s steps(24, end) infinite;
+}
+
+@keyframes mobileTyping {
+  0% {
+    content: '';
+  }
+  100% {
+    content: '';
+  }
+}
+
+/* ===================== MOBILE PROGRESS BAR - RAINBOW ANIMATED ===================== */
+
+.mobile-progress-bar {
+  width: 220px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 20px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.mobile-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcf7f, #4d96ff, #d471ff, #ff6b6b);
+  background-size: 200% 100%;
+  border-radius: 10px;
+  animation: mobileRainbowSlide 2s ease-in-out infinite;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.9);
+}
+
+@keyframes mobileRainbowSlide {
+  0% {
+    width: 0%;
+    background-position: 0% center;
+  }
+  50% {
+    width: 100%;
+    background-position: 100% center;
+  }
+  100% {
+    width: 0%;
+    background-position: 0% center;
+  }
+}
+
+/* ===================== FLOATING BACKGROUND EMOJIS - SPIRAL PATTERN ===================== */
+
+.mobile-floating-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.mobile-float-item {
+  position: absolute;
+  font-size: 40px;
+  opacity: 0.1;
+  animation: mobileSpiral 6s linear infinite;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
+}
+
+.f1 {
+  top: 50%;
+  left: 50%;
+  animation-delay: 0s;
+}
+
+.f2 {
+  top: 50%;
+  left: 50%;
+  animation-delay: 0.75s;
+}
+
+.f3 {
+  top: 50%;
+  left: 50%;
+  animation-delay: 1.5s;
+}
+
+.f4 {
+  top: 50%;
+  left: 50%;
+  animation-delay: 2.25s;
+}
+
+.f5 {
+  top: 50%;
+  left: 50%;
+  animation-delay: 3s;
+}
+
+.f6 {
+  top: 50%;
+  left: 50%;
+  animation-delay: 3.75s;
+}
+
+@keyframes mobileSpiral {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(0.5);
+    opacity: 0.1;
+  }
+  25% {
+    transform: translate(60px, -60px) rotate(90deg) scale(0.8);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translate(80px, 0) rotate(180deg) scale(1);
+    opacity: 0.2;
+  }
+  75% {
+    transform: translate(60px, 60px) rotate(270deg) scale(0.8);
+    opacity: 0.15;
+  }
+  100% {
+    transform: translate(0, 0) rotate(360deg) scale(0.5);
+    opacity: 0.1;
+  }
+}
+
+/* ===================== DESKTOP LOADER - ORIGINAL ===================== */
+
+.loader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.loader-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  position: relative;
+}
+
+/* Main Circle */
+.loader-circle {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin-bottom: 40px;
+}
+
+.circle-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top: 4px solid #10b981;
+  border-right: 4px solid #f59e0b;
+  animation: spin 3s linear infinite;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Rotating Border */
+.rotating-border {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border: 3px solid transparent;
+  border-top: 3px solid rgba(255, 255, 255, 0.5);
+  border-right: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  animation: rotateBorder 8s linear infinite reverse;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes rotateBorder {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Floating Icons */
+.floating-icons {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.floating-icon {
+  position: absolute;
+  font-size: 32px;
+  animation: float 6s ease-in-out infinite;
+  opacity: 0.8;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+}
+
+.icon-1 { top: -40px; left: 50%; transform: translateX(-50%); animation-delay: 0s; }
+.icon-2 { top: -25px; right: -25px; animation-delay: 1s; }
+.icon-3 { top: 40px; right: -45px; animation-delay: 2s; }
+.icon-4 { bottom: -25px; right: -25px; animation-delay: 3s; }
+.icon-5 { bottom: -40px; left: 50%; transform: translateX(-50%); animation-delay: 4s; }
+.icon-6 { bottom: -25px; left: -25px; animation-delay: 5s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); opacity: 0.8; }
+  50% { transform: translateY(-20px); opacity: 1; }
+}
+
+/* Text */
+.loader-text {
+  text-align: center;
+  margin-top: 50px;
+  color: white;
+  z-index: 11;
+}
+
+.loader-text h2 {
+  font-size: 36px;
+  font-weight: 700;
+  margin: 0 0 15px 0;
+  letter-spacing: 2px;
+  animation: fadeInScale 0.8s ease-out;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.loading-dots {
+  font-size: 28px;
+  letter-spacing: 8px;
+  height: 30px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.loading-dots span {
+  animation: blink 1.4s infinite;
+  opacity: 0.3;
+  margin: 0 3px;
+  color: white;
+}
+
+.loading-dots span:nth-child(1) { animation-delay: 0s; }
+.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes blink {
+  0%, 60%, 100% { opacity: 0.3; }
+  30% { opacity: 1; }
+}
+
+.loader-message {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 15px 0 0 0;
+  font-weight: 500;
+  letter-spacing: 1px;
+  animation: slideUp 0.8s ease-out;
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Progress Bar */
+.progress-container {
+  margin-top: 40px;
+  width: 250px;
+  z-index: 11;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #3b82f6, #f59e0b, #10b981);
+  background-size: 200% 100%;
+  border-radius: 10px;
+  animation: progressMove 2s ease-in-out infinite;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
+}
+
+@keyframes progressMove {
+  0% { width: 0%; }
+  50% { width: 100%; }
+  100% { width: 0%; }
+}
+
+.progress-text {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+/* Background Particles */
+.loader-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.bg-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  animation: drift 15s infinite linear;
+}
+
+.particle-1 { width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s; animation-duration: 20s; box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.2); }
+.particle-2 { width: 60px; height: 60px; top: 20%; right: 15%; animation-delay: 2s; animation-duration: 25s; box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.2); }
+.particle-3 { width: 100px; height: 100px; bottom: 15%; left: 5%; animation-delay: 4s; animation-duration: 30s; box-shadow: inset 0 0 25px rgba(255, 255, 255, 0.2); }
+.particle-4 { width: 50px; height: 50px; bottom: 10%; right: 10%; animation-delay: 1s; animation-duration: 22s; box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.2); }
+.particle-5 { width: 70px; height: 70px; top: 50%; right: 5%; animation-delay: 3s; animation-duration: 28s; box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.2); }
+
+@keyframes drift {
+  0%, 100% { transform: translateX(0) translateY(0); opacity: 0.1; }
+  50% { opacity: 0.3; }
+}

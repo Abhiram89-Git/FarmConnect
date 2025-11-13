@@ -2,6 +2,7 @@ import './index.css';
 import { Component } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
+import Loader from '../Loader';
 
 class Home extends Component {
   statesData = {
@@ -15,10 +16,11 @@ class Home extends Component {
   };
 
   state = {
+    isLoading: true,
     searchInput: '',
     weather: null,
     locationError: '',
-    isLoading: false,
+    isLoadingWeather: false,
     tipOfTheDay: '',
     marketSellPrices: [],
     marketBuyPrices: [],
@@ -88,20 +90,28 @@ class Home extends Component {
   aiMessagesEndRef = null;
 
   componentDidMount() {
-    this.startWatchingLocation();
-    this.showTipOfTheDay();
-    this.fetchMarketPrices();
-    this.setState({ selectedLand: this.state.landTypes[0], districts: this.statesData['Tamil Nadu'] });
-    this.initializeCropCalendar();
-    this.initializeGovernmentSchemes();
-    this.initializePestGuide();
-    this.initializeForumPosts();
-    this.initializeWeatherForecast();
-    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
-    this.setState({ darkMode: savedDarkMode });
-    if (savedDarkMode) {
-      document.body.classList.add('dark-mode');
-    }
+    // Simulate loading time (3 seconds)
+    setTimeout(() => {
+      this.startWatchingLocation();
+      this.showTipOfTheDay();
+      this.fetchMarketPrices();
+      this.setState({ 
+        selectedLand: this.state.landTypes[0], 
+        districts: this.statesData['Tamil Nadu'],
+        isLoading: false 
+      });
+      this.initializeCropCalendar();
+      this.initializeGovernmentSchemes();
+      this.initializePestGuide();
+      this.initializeForumPosts();
+      this.initializeWeatherForecast();
+      
+      const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+      this.setState({ darkMode: savedDarkMode });
+      if (savedDarkMode) {
+        document.body.classList.add('dark-mode');
+      }
+    }, 3000);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -116,6 +126,189 @@ class Home extends Component {
     }
   }
 
+  // ===================== SEARCH METHODS =====================
+  getSearchResults = () => {
+    const { searchInput, cropListings, governmentSchemes, pestGuide, forumPosts, marketSellPrices, marketBuyPrices } = this.state;
+    const query = searchInput.toLowerCase().trim();
+
+    if (!query) return null;
+
+    const results = {
+      crops: [],
+      schemes: [],
+      pests: [],
+      forum: [],
+      market: []
+    };
+
+    cropListings.forEach(crop => {
+      if (
+        crop.crop.toLowerCase().includes(query) ||
+        crop.farmer.toLowerCase().includes(query) ||
+        crop.location.toLowerCase().includes(query) ||
+        crop.description.toLowerCase().includes(query)
+      ) {
+        results.crops.push(crop);
+      }
+    });
+
+    governmentSchemes.forEach(scheme => {
+      if (
+        scheme.name.toLowerCase().includes(query) ||
+        scheme.description.toLowerCase().includes(query) ||
+        scheme.category.toLowerCase().includes(query) ||
+        scheme.benefits.toLowerCase().includes(query)
+      ) {
+        results.schemes.push(scheme);
+      }
+    });
+
+    pestGuide.forEach(pest => {
+      if (
+        pest.name.toLowerCase().includes(query) ||
+        pest.crops.some(c => c.toLowerCase().includes(query)) ||
+        pest.symptoms.some(s => s.toLowerCase().includes(query)) ||
+        pest.treatment.toLowerCase().includes(query)
+      ) {
+        results.pests.push(pest);
+      }
+    });
+
+    forumPosts.forEach(post => {
+      if (
+        post.title.toLowerCase().includes(query) ||
+        post.content.toLowerCase().includes(query) ||
+        post.author.toLowerCase().includes(query) ||
+        post.category.toLowerCase().includes(query)
+      ) {
+        results.forum.push(post);
+      }
+    });
+
+    const allPrices = [...marketSellPrices, ...marketBuyPrices];
+    allPrices.forEach(item => {
+      if (item.crop.toLowerCase().includes(query)) {
+        results.market.push(item);
+      }
+    });
+
+    return results;
+  };
+
+  renderSearchResults = () => {
+    const results = this.getSearchResults();
+    
+    if (!results) return null;
+
+    const totalResults = results.crops.length + results.schemes.length + results.pests.length + results.forum.length + results.market.length;
+
+    return (
+      <div className="search-results-container">
+        <div className="search-results-header">
+          <h2>Search Results</h2>
+          <p className="results-count">Found {totalResults} result(s) for "<strong>{this.state.searchInput}</strong>"</p>
+        </div>
+
+        {results.crops.length > 0 && (
+          <div className="search-results-section">
+            <h3>🌾 Crop Listings ({results.crops.length})</h3>
+            <div className="search-results-grid">
+              {results.crops.map((crop) => (
+                <div key={crop.id} className="search-result-card crop-result">
+                  <div className="result-icon">{crop.image}</div>
+                  <h4>{crop.crop}</h4>
+                  <p className="result-detail"><strong>Farmer:</strong> {crop.farmer}</p>
+                  <p className="result-detail"><strong>Price:</strong> <span className="price-highlight">{crop.price}</span></p>
+                  <p className="result-detail"><strong>Quantity:</strong> {crop.quantity}</p>
+                  <p className="result-detail"><strong>📍 Location:</strong> {crop.location}</p>
+                  <div className="search-result-actions">
+                    <button className="contact-btn" onClick={() => this.handleContactFarmer(crop.email, crop.crop)}>📧 Contact</button>
+                    <button className="call-btn" onClick={() => this.handleCallFarmer(crop.phone)}>☎️ Call</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {results.schemes.length > 0 && (
+          <div className="search-results-section">
+            <h3>🏛️ Government Schemes ({results.schemes.length})</h3>
+            <div className="search-results-grid">
+              {results.schemes.map((scheme) => (
+                <div key={scheme.id} className="search-result-card scheme-result">
+                  <h4>{scheme.name}</h4>
+                  <p className="result-category">{scheme.category}</p>
+                  <p className="result-detail">{scheme.description}</p>
+                  <p className="result-detail"><strong>Eligibility:</strong> {scheme.eligibility}</p>
+                  <p className="result-detail"><strong>Benefits:</strong> {scheme.benefits}</p>
+                  <button className="apply-btn" onClick={() => this.handleApplyNow(scheme.url)}>Apply Now →</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {results.pests.length > 0 && (
+          <div className="search-results-section">
+            <h3>🐛 Pests ({results.pests.length})</h3>
+            <div className="search-results-grid">
+              {results.pests.map((pest) => (
+                <div key={pest.id} className="search-result-card pest-result">
+                  <div className="result-icon">{pest.image}</div>
+                  <h4>{pest.name}</h4>
+                  <span className={`pest-severity severity-${pest.severity}`}>{pest.severity.toUpperCase()}</span>
+                  <p className="result-detail"><strong>Affects:</strong> {pest.crops.join(', ')}</p>
+                  <p className="result-detail"><strong>Treatment:</strong> {pest.treatment}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {results.forum.length > 0 && (
+          <div className="search-results-section">
+            <h3>💬 Forum Posts ({results.forum.length})</h3>
+            {results.forum.map((post) => (
+              <div key={post.id} className="search-result-card forum-result">
+                <h4>{post.title}</h4>
+                <p className="result-meta">By <strong>{post.author}</strong> • {post.category}</p>
+                <p className="result-detail">{post.content}</p>
+                <p className="result-stats">{post.replies} replies • {post.views} views • {post.timestamp}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {results.market.length > 0 && (
+          <div className="search-results-section">
+            <h3>📊 Market Prices ({results.market.length})</h3>
+            <div className="search-results-grid">
+              {results.market.map((item, index) => (
+                <div key={index} className={`search-result-card market-result ${item.type}-price`}>
+                  <div className="result-icon">{item.icon}</div>
+                  <h4>{item.crop}</h4>
+                  <p className="result-detail"><strong>Price:</strong> <span className="price-highlight">{item.price}</span></p>
+                  <p className="result-detail"><strong>Type:</strong> {item.type === 'sell' ? '🌾 Farmer Sells' : '🛒 Farmer Buys'}</p>
+                  <p className="result-detail"><strong>Location:</strong> {item.district}, {item.state}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {totalResults === 0 && (
+          <div className="no-results">
+            <p style={{fontSize: '24px'}}>❌</p>
+            <p style={{fontSize: '18px', fontWeight: 'bold'}}>No results found</p>
+            <p>Try searching with different keywords like crop names, farmer names, or locations</p>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // ===================== OTHER METHODS =====================
   scrollAIToBottom = () => {
     if (this.aiMessagesEndRef) {
       this.aiMessagesEndRef.scrollIntoView({ behavior: 'smooth' });
@@ -147,18 +340,7 @@ class Home extends Component {
           messages: [
             {
               role: 'user',
-              content: `You are an expert agricultural assistant with deep knowledge of farming practices in India, especially Tamil Nadu. You help farmers with:
-- Crop cultivation and planning
-- Pest and disease management
-- Soil health and fertilizers
-- Irrigation techniques
-- Weather-based advice
-- Market information
-- Government schemes
-
-Provide practical, actionable advice in a friendly tone. Keep responses clear and concise (2-4 paragraphs).
-
-Farmer's question: ${userMessage}`
+              content: `You are an expert agricultural assistant with deep knowledge of farming practices in India, especially Tamil Nadu. Provide practical, actionable advice in a friendly tone. Keep responses clear and concise (2-4 paragraphs).\n\nFarmer's question: ${userMessage}`
             }
           ]
         })
@@ -180,71 +362,17 @@ Farmer's question: ${userMessage}`
           aiMessages: [...prevState.aiMessages, { role: 'assistant', content: assistantMessage }],
           isAILoading: false
         }));
-        return; // Successfully got API response
+        return;
       } else {
         throw new Error('No content in API response');
       }
     } catch (error) {
       console.error('API Error:', error.message);
       
-      // Fallback: Use a more intelligent rule-based system
-      const lowerMessage = userMessage.toLowerCase();
-      let fallbackMessage = '';
-      
-      // Pest management
-      if (lowerMessage.match(/pest|insect|bug|aphid|worm|caterpillar|whitefly|attack|disease|fungus|rot/i)) {
-        if (lowerMessage.includes('tomato')) {
-          fallbackMessage = `**Tomato Pest Control:**\n\nCommon pests affecting tomatoes include fruit borers, whiteflies, and aphids. For prevention, use yellow sticky traps and maintain proper plant spacing (60x45 cm). Neem oil spray (5ml per liter) applied every 7-10 days works well for most pests.\n\nFor fruit borers specifically, remove infected fruits immediately and use pheromone traps. If chemical control is needed, consult your local agricultural officer for approved pesticides. Always spray during early morning or evening hours.\n\nTo prevent fungal diseases, avoid overhead watering and ensure good air circulation. Remove infected leaves promptly and apply copper-based fungicides if necessary.`;
-        } else {
-          fallbackMessage = `**Integrated Pest Management:**\n\nEffective pest control combines multiple approaches. Start with preventive measures: regular field monitoring, proper spacing, crop rotation, and removing infected plants immediately. These steps can prevent 60-70% of pest problems.\n\nFor organic control, neem oil (5ml/liter water) is effective against soft-bodied insects. Spray early morning or evening. Use pheromone traps for specific pests. Encourage natural predators like ladybugs and lacewings.\n\nIf chemical pesticides are necessary, use them as a last resort. Always follow label instructions, wear protective equipment, and maintain proper waiting periods before harvest. Contact your nearest Krishi Vigyan Kendra for pest identification and specific treatment recommendations.`;
-        }
-      }
-      // Rice cultivation
-      else if (lowerMessage.match(/rice|paddy|kuruvai|samba|thaladi/i)) {
-        fallbackMessage = `**Rice Cultivation in Tamil Nadu:**\n\nTamil Nadu has three main rice seasons: Kuruvai (June-July), Samba (August-September), and Thaladi (December-January). Samba is the main season with highest yields. Choose varieties based on your region - short-duration (110-120 days) or long-duration (140-150 days) varieties.\n\nFor water management, maintain 2-3 inches of standing water during vegetative and flowering stages. Drain fields 10-15 days before harvest to facilitate harvesting and improve grain quality. Practice alternate wetting and drying (AWD) to save 20-30% water without affecting yield.\n\nApply fertilizers in split doses: NPK ratio of 150:50:50 kg/hectare is recommended. Apply 50% nitrogen at planting, 25% at tillering, and 25% at panicle initiation. Mix with zinc sulfate (25 kg/ha) if your soil is deficient. Top-dress with potash at flowering stage for better grain filling.`;
-      }
-      // Irrigation
-      else if (lowerMessage.match(/water|irrigat|drip|spray|flood|moisture/i)) {
-        fallbackMessage = `**Smart Irrigation Practices:**\n\nTiming is crucial for irrigation efficiency. Water early morning (6-8 AM) or evening (4-6 PM) to minimize evaporation losses (up to 40%). Avoid midday watering. Check soil moisture 4-6 inches deep before irrigating - if soil sticks together when squeezed, skip watering.\n\nDrip irrigation is most efficient, saving 40-60% water compared to flood irrigation. Initial cost is ₹35,000-50,000 per acre but government subsidies (up to 50%) are available. Best for vegetables, cotton, sugarcane, and fruit crops. Maintains optimal soil moisture and reduces weed growth.\n\nFor flood irrigation, practice alternate furrow irrigation or check basin method to save water. Sandy soils need frequent light watering (every 3-4 days), while clay soils can go 7-10 days between irrigations. Monitor crop appearance - wilting during early morning indicates water stress.`;
-      }
-      // Fertilizer and nutrients
-      else if (lowerMessage.match(/fertilizer|nutrient|nitrogen|phosphorus|potassium|deficiency|npk|compost|manure/i)) {
-        fallbackMessage = `**Balanced Fertilizer Management:**\n\nStart with soil testing every 2-3 years to know exact nutrient requirements. Government agricultural offices provide free or subsidized soil testing. Based on results, apply fertilizers in correct NPK ratio. Over-fertilization harms soil health and pollutes groundwater.\n\nOrganic sources improve long-term soil health: Apply 5-10 tons of farmyard manure or 2-3 tons of compost per acre before planting. Vermicompost (1-2 tons/acre) provides balanced nutrients. Green manuring with dhaincha or sunhemp adds 40-60 kg nitrogen per acre naturally.\n\nRecognize deficiency symptoms: Yellowing of older leaves indicates nitrogen deficiency, purple/dark leaves suggest phosphorus deficiency, and brown leaf edges show potassium deficiency. Apply appropriate fertilizers in split doses rather than single heavy application for better nutrient uptake and less wastage.`;
-      }
-      // Soil health
-      else if (lowerMessage.match(/soil|fertility|ph|organic|matter|health|test/i)) {
-        fallbackMessage = `**Improving Soil Health:**\n\nSoil pH is fundamental - most crops prefer pH 6.0-7.5. Test pH using simple kits (₹50-100) or free government testing. To increase pH in acidic soils, apply agricultural lime (200-500 kg/acre). To decrease pH in alkaline soils, add sulfur (50-100 kg/acre) or use acidic organic matter.\n\nBuild organic matter through multiple sources: Apply compost (2-3 tons/acre annually), practice crop residue incorporation, use green manure crops during off-season, and add vermicompost. Organic matter improves water retention, nutrient availability, and beneficial microbial activity.\n\nImplement crop rotation to maintain soil fertility: Rotate cereals with legumes (pulses) which fix atmospheric nitrogen. For example: Rice → Blackgram → Rice, or Cotton → Chickpea → Maize. This breaks pest cycles, balances nutrient use, and improves soil structure naturally.`;
-      }
-      // Crop selection and planning
-      else if (lowerMessage.match(/crop|plant|grow|suitable|season|time|when|calendar|planning/i)) {
-        if (lowerMessage.includes('tomato')) {
-          fallbackMessage = `**Tomato Cultivation Guide:**\n\nBest planting season is October-November (Rabi season) in Tamil Nadu for open-field cultivation. Summer cultivation (January-February) is also possible with adequate irrigation. Popular varieties: Arka Vikas (determinate), PKM-1 (heat-tolerant), and Lakshmi (high-yielding).\n\nPrepare raised beds (15-20 cm high) for good drainage. Space plants 60 cm between rows and 45 cm within rows. Apply 20-25 tons of farmyard manure and NPK 100:50:50 kg/acre. Stake plants at 2-3 weeks for support and better fruit quality.\n\nWater regularly but avoid waterlogging. Mulch with rice straw to conserve moisture and prevent fruit rot. Harvest when fruits show full color but are still firm. Expected yield: 15-20 tons per acre. Practice crop rotation - don't grow tomato, potato, or brinjal consecutively as they share pests.`;
-        } else {
-          fallbackMessage = `**Crop Selection for Tamil Nadu:**\n\nChoose crops based on three factors: soil type, water availability, and market demand. Rice and sugarcane need ample water and clay-loam soil. Cotton, groundnut, and millets are drought-resistant, suitable for red soils. Pulses fix nitrogen and improve soil, ideal for rotation.\n\nSeasonal planning: Kharif (June-October) with monsoon - rice, cotton, maize, groundnut. Rabi (October-March) with winter - pulses, oilseeds, vegetables. Summer (March-June) - pulses, vegetables, fodder crops with irrigation. Always check monsoon predictions before finalizing crops.\n\nMarket research is crucial before planting. Check APMC wholesale prices for past 2-3 years. Use government apps like "Kisan Suvidha" and "Agri Market" for real-time prices. Consider government procurement schemes for assured prices - rice, wheat, pulses have Minimum Support Price (MSP) guarantee.`;
-        }
-      }
-      // Weather and climate
-      else if (lowerMessage.match(/weather|rain|monsoon|drought|temperature|climate/i)) {
-        fallbackMessage = `**Weather-Based Farming:**\n\nCheck weather forecasts regularly using apps like IMD Weather, Meghdoot, or Mausam. Plan farm activities based on 7-day forecasts - avoid spraying pesticides before rain, delay harvesting if rain expected, and irrigate based on rainfall predictions.\n\nMonsoon management: Ensure proper drainage to prevent waterlogging. Make bunds around fields to capture rainwater. During deficit monsoon, choose short-duration varieties (90-110 days) and practice mulching to conserve moisture. Store rainwater in farm ponds for supplementary irrigation.\n\nHeat stress management: During summer, provide shade nets for sensitive crops, irrigate more frequently, apply mulch to keep soil cool, and schedule irrigation during evening hours. Cold stress: Cover seedlings during cold nights, delay sowing if frost expected, and choose cold-tolerant varieties for winter crops.`;
-      }
-      // Government schemes
-      else if (lowerMessage.match(/scheme|subsidy|loan|kisan|government|pm-kisan|insurance|credit/i)) {
-        fallbackMessage = `**Government Schemes for Farmers:**\n\n**PM-KISAN**: Direct income support of ₹6,000 per year in three installments for all farmers. Register at https://pmkisan.gov.in with land records and Aadhaar.\n\n**PM Fasal Bima Yojana**: Crop insurance covering losses from natural calamities. Premium is only 1.5-2% of sum insured, rest subsidized by government. Apply through banks or online at https://pmfby.gov.in.\n\n**Kisan Credit Card (KCC)**: Credit up to ₹3 lakh at 7% interest rate for farming expenses. Apply through banks with land documents. **Soil Health Card Scheme**: Free soil testing every 2-3 years. **Drip/Sprinkler Subsidy**: 50-60% subsidy on micro-irrigation systems. Contact your nearest agricultural department office or Krishi Vigyan Kendra (KVK) for application assistance.`;
-      }
-      // Market and prices
-      else if (lowerMessage.match(/market|price|sell|msp|apmc|mandi/i)) {
-        fallbackMessage = `**Agricultural Market Information:**\n\nCheck market prices before harvesting to plan selling strategy. Use these resources: **eNAM portal** (https://enam.gov.in) for nationwide APMC prices, **Agri Market app** for mobile updates, local APMC market yards, and agricultural department websites.\n\nMinimum Support Price (MSP) is available for 23 crops including rice, wheat, pulses, oilseeds, and cotton. Government procures at MSP through FCI and state agencies. Register with procurement centers during harvest season with land documents.\n\nTo get better prices: Grade your produce properly, remove damaged items, clean and dry thoroughly, use proper packaging, and consider collective selling through Farmer Producer Organizations (FPOs) for better bargaining power. Store non-perishable crops if prices are low, but ensure proper storage to prevent losses.`;
-      }
-      // General or unmatched questions
-      else {
-        fallbackMessage = `**Agricultural Guidance:**\n\nFor specific farming advice, I can help with topics like crop cultivation, pest management, irrigation, fertilizers, soil health, weather planning, government schemes, and market information. Please ask about any particular aspect of farming you need help with.\n\n**Quick Tips:**\n• Visit your nearest Krishi Vigyan Kendra (KVK) for hands-on training and demonstrations\n• Join Farmer Producer Organizations (FPOs) in your area for collective benefits\n• Use government apps: Kisan Suvidha, Agri Market, Meghdoot for farming information\n• Maintain farm records (expenses, yields, weather) for better planning\n• Test soil every 2-3 years and follow soil health card recommendations\n\nFeel free to ask specific questions about any crop, pest problem, irrigation method, or farming practice you need help with!`;
-      }
+      const fallbackMessage = `I'm here to help with farming advice! I can assist with:\n\n• Crop cultivation and planning\n• Pest and disease management\n• Soil health and fertilizers\n• Irrigation techniques\n• Weather-based advice\n• Market information\n• Government schemes\n\nPlease ask a specific question about any of these topics.`;
       
       this.setState(prevState => ({
-        aiMessages: [...prevState.aiMessages, { 
-          role: 'assistant', 
-          content: fallbackMessage
-        }],
+        aiMessages: [...prevState.aiMessages, { role: 'assistant', content: fallbackMessage }],
         isAILoading: false
       }));
     }
@@ -296,7 +424,7 @@ Farmer's question: ${userMessage}`
 
   refreshWeather = () => {
     if (navigator.geolocation) {
-      this.setState({ isLoading: true });
+      this.setState({ isLoadingWeather: true });
       navigator.geolocation.getCurrentPosition(this.fetchWeather, this.handleLocationError, { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 });
     }
   };
@@ -314,18 +442,18 @@ Farmer's question: ${userMessage}`
         const precipitation = (data.rain && data.rain['1h']) ? data.rain['1h'] : (data.rain && data.rain['3h']) ? data.rain['3h'] : 0;
         const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         const newWeather = { location: data.name || 'Unknown Location', temperature: data.main?.temp ?? 'N/A', humidity: data.main?.humidity ?? 'N/A', windSpeed: data.wind?.speed ?? 'N/A', condition: data.weather?.[0]?.main ?? 'N/A', icon: `https://openweathermap.org/img/wn/${data.weather?.[0]?.icon}@2x.png`, precipitation, time };
-        this.setState({ weather: newWeather, locationError: '', isLoading: false });
+        this.setState({ weather: newWeather, locationError: '', isLoadingWeather: false });
         this.checkWeatherAlerts(newWeather);
       } else {
-        this.setState({ locationError: 'Weather data not available', isLoading: false });
+        this.setState({ locationError: 'Weather data not available', isLoadingWeather: false });
       }
     } catch (error) {
-      this.setState({ locationError: 'Unable to fetch weather data', isLoading: false });
+      this.setState({ locationError: 'Unable to fetch weather data', isLoadingWeather: false });
     }
   };
 
   handleLocationError = () => {
-    this.setState({ locationError: 'Location access denied or unavailable', isLoading: false });
+    this.setState({ locationError: 'Location access denied or unavailable', isLoadingWeather: false });
   };
 
   onSearch = (event) => {
@@ -573,7 +701,7 @@ Farmer's question: ${userMessage}`
   };
 
   render() {
-    const { darkMode, searchInput, weather, locationError, isLoading, tipOfTheDay, marketSellPrices, marketBuyPrices, isMarketLoading, pestAlerts, landTypes, selectedLand, sustainabilityMetrics, aiAdvice, activeTab, districts, selectedDistrict, showLocationModal, userLocation, cropCalendar, showCropCalendar, governmentSchemes, showSchemes, pestGuide, showPestGuide, forumPosts, showForum, loanAmount, interestRate, loanPeriod, loanResult, showLoanCalculator, weatherForecast, showForecast, cropListings, showUploadForm, newCrop, isAIChatOpen, aiMessages, aiInput, isAILoading } = this.state;
+    const { isLoading, darkMode, searchInput, weather, locationError, isLoadingWeather, tipOfTheDay, marketSellPrices, marketBuyPrices, isMarketLoading, pestAlerts, landTypes, selectedLand, sustainabilityMetrics, aiAdvice, activeTab, districts, selectedDistrict, showLocationModal, userLocation, cropCalendar, showCropCalendar, governmentSchemes, showSchemes, pestGuide, showPestGuide, forumPosts, showForum, loanAmount, interestRate, loanPeriod, loanResult, showLoanCalculator, weatherForecast, showForecast, cropListings, showUploadForm, newCrop, isAIChatOpen, aiMessages, aiInput, isAILoading } = this.state;
     
     const currentPath = window.location.pathname;
 
@@ -583,6 +711,11 @@ Farmer's question: ${userMessage}`
       "How to improve soil fertility naturally?",
       "What are signs of nitrogen deficiency?"
     ];
+
+    // Show loader while page is loading
+    if (isLoading) {
+      return <Loader />;
+    }
     
     return (
       <div className="home-container">
@@ -596,12 +729,7 @@ Farmer's question: ${userMessage}`
             <BiSearch className="search-icon" />
           </div>
           <button className="dark-mode-toggle" onClick={this.toggleDarkMode} title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}>
-            {darkMode ? <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" className="bi bi-sun" viewBox="0 0 16 16">
-            <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708"/>
-            </svg> : <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-moon-stars" viewBox="0 0 16 16">
-            <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278M4.858 1.311A7.27 7.27 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.32 7.32 0 0 0 5.205-2.162q-.506.063-1.029.063c-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286"/>
-            <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z"/>
-</svg>}
+            {darkMode ? <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" className="bi bi-sun" viewBox="0 0 16 16"><path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708"/></svg> : <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" className="bi bi-moon-stars" viewBox="0 0 16 16"><path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278M4.858 1.311A7.27 7.27 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.32 7.32 0 0 0 5.205-2.162q-.506.063-1.029.063c-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286"/><path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z"/></svg>}
           </button>
         </header>
 
@@ -634,6 +762,8 @@ Farmer's question: ${userMessage}`
         )}
 
         <div className="main-content">
+          {this.state.searchInput && this.renderSearchResults()}
+
           <div className='wel-header'>
             <div className='col-8'>
               <h1 className="welcome-head">Welcome</h1>
@@ -646,7 +776,7 @@ Farmer's question: ${userMessage}`
                 </div>
               )}
             </div>
-            {isLoading ? (
+            {isLoadingWeather ? (
               <div className="loader">⏳ Updating Weather...</div>
             ) : weather ? (
               <div className="weather-card">

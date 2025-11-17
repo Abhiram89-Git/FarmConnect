@@ -8,58 +8,58 @@ const toolslist = [
     name: 'Shovel',
     description: 'A shovel is used for digging soil, planting, and moving materials like sand or compost.',
     imageUrl: 'https://images.unsplash.com/photo-1592152567536-1237e839f264?auto=format&fit=crop&q=60&w=600',
-    videoUrl: 'https://www.youtube.com/embed/0Sr6qzZ7kZI'
+    videoUrl: 'https://www.youtube.com/embed/s28Sr90JI_s'  // How to use a shovel
   },
   {
     id: 2,
     name: 'Hoe',
     description: 'A hoe helps to remove weeds and loosen the soil for planting crops.',
     imageUrl: 'https://images.unsplash.com/photo-1574780171501-1b64aa3e64b1?auto=format&fit=crop&q=60&w=600',
-    videoUrl: 'https://www.youtube.com/embed/yOMlfm2wVUw'
+    videoUrl: 'https://www.youtube.com/embed/UHaKaB28GCY'  // How to use a garden hoe
   },
   {
     id: 3,
     name: 'Rake',
     description: 'A rake is used to gather leaves, hay, or soil evenly across the field.',
     imageUrl: 'https://images.unsplash.com/photo-1601880987242-8d58b0e61f43?auto=format&fit=crop&q=60&w=600',
-    videoUrl: 'https://www.youtube.com/embed/d9LZQpZx7Fg'
+    videoUrl: 'https://www.youtube.com/embed/N9W3_xQWNRU'  // How to use a garden rake
   },
   {
     id: 4,
     name: 'Plough',
     description: 'A plough turns and loosens soil, preparing it for sowing seeds.',
     imageUrl: 'https://images.unsplash.com/photo-1582738411988-f9a77f8d9f97?auto=format&fit=crop&q=60&w=600',
-    videoUrl: 'https://www.youtube.com/embed/aeK6Jt7vltY'
+    videoUrl: 'https://www.youtube.com/embed/eNEyxFc-Lzk'  // Tractor ploughing demo
   },
   {
     id: 5,
     name: 'Sprayer',
     description: 'A sprayer is used to apply fertilizers and pesticides evenly on crops.',
     imageUrl: 'https://images.unsplash.com/photo-1628245200845-7d875d4cbb5f?auto=format&fit=crop&q=60&w=600',
-    videoUrl: 'https://www.youtube.com/embed/AhSxkVZLo1M'
+    videoUrl: 'https://www.youtube.com/embed/A70mPt35cpg'  // How to use and care for an agricultural sprayer
   },
   {
     id: 6,
     name: 'Watering Can',
     description: 'Used for watering plants manually in gardens and nurseries.',
     imageUrl: 'https://images.unsplash.com/photo-1615485390347-3f66c06bbd1c?auto=format&fit=crop&q=60&w=600',
-    videoUrl: 'https://www.youtube.com/embed/PzR1YI4c5dU'
+    videoUrl: 'https://www.youtube.com/embed/kqPm4HKJ7Y0'  // Watering houseplants / garden properly
   },
   {
     id: 7,
     name: 'Wheelbarrow',
     description: 'A wheelbarrow helps transport soil, fertilizer, and crops easily.',
     imageUrl: 'https://images.unsplash.com/photo-1613748185008-12b8af87a0ed?auto=format&fit=crop&q=60&w=600',
-    videoUrl: 'https://www.youtube.com/embed/KvYDFsDlyLk'
+    videoUrl: 'https://www.youtube.com/embed/ICh0qEUnm44'  // How to use a wheelbarrow
   },
   {
     id: 8,
     name: 'Sickle',
     description: 'A sickle is used to cut crops or grass manually with its curved blade.',
     imageUrl: 'https://images.unsplash.com/photo-1608647343039-32c4e9a2f08d?auto=format&fit=crop&q=60&w=600',
-    videoUrl: 'https://www.youtube.com/embed/vzJSXzF9sfQ'
+    videoUrl: 'https://www.youtube.com/embed/2iU0uYeO7XI'  // Sickle / harvesting demo
   }
-]
+];
 
 function ToolDetails() {
   const { id } = useParams()

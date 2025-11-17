@@ -8,56 +8,56 @@ const irrigationList = [
     name: 'Furrow Irrigation',
     description: 'Furrow irrigation involves creating small parallel channels along the field length to distribute water.',
     imageUrl: 'https://images.unsplash.com/photo-1581091215361-51f54d77d478?auto=format&fit=crop&q=60&w=600',
-    videoUrl: 'https://www.youtube.com/embed/1aT8m1xK2yA',
+    videoUrl: 'https://www.youtube.com/embed/CEQjuc0gpmM', // Furrow irrigation demo
   },
   {
     id: 2,
     name: 'Border Irrigation',
     description: 'Border irrigation distributes water over sloping fields using bordered strips.',
     imageUrl: 'https://images.unsplash.com/photo-1616532626118-477d206c78c6?auto=format&fit=crop&q=60&w=600',
-    videoUrl: 'https://www.youtube.com/embed/3bZbXWjhJvA',
+    videoUrl: 'https://www.youtube.com/embed/Y5E5YcBevxE', // Border strip irrigation
   },
   {
     id: 3,
     name: 'Basin Irrigation',
     description: 'Basin irrigation is commonly used for fruit trees where water is applied to basins around the tree.',
     imageUrl: 'https://images.unsplash.com/photo-1581090706460-7c8f04ee2f0a?auto=format&fit=crop&q=60&w=600',
-    videoUrl: 'https://www.youtube.com/embed/oVQbK5qUKuY',
+    videoUrl: 'https://www.youtube.com/embed/FzQlbfCQUPA', // Basin / surface irrigation
   },
   {
     id: 4,
     name: 'Center Pivot Sprinkler',
-    description: 'Center pivot sprinkler irrigation types rotate around a pivot to irrigate crops uniformly.',
+    description: 'Center pivot sprinkler systems rotate around a pivot to irrigate crops uniformly.',
     imageUrl: 'https://images.unsplash.com/photo-1579252469682-9e882ba8c0d3?auto=format&fit=crop&q=60&w=600',
-    videoUrl: 'https://www.youtube.com/embed/X3r3W8Hl2pM',
+    videoUrl: 'https://www.youtube.com/embed/2bILpvH3EuQ', // What is a center pivot?
   },
   {
     id: 5,
     name: 'Portable Sprinklers',
-    description: 'Drip irrigation delivers water directly to the root zone through emitters, saving water and nutrients.',
+    description: 'Portable sprinklers are movable sprinkler heads used to irrigate different parts of a field or garden.',
     imageUrl: 'https://images.unsplash.com/photo-1579651278448-5a95fcf9b173?auto=format&fit=crop&q=60&w=600',
-    videoUrl: 'https://www.youtube.com/embed/aZb6E5Ayyhg',
+    videoUrl: 'https://www.youtube.com/embed/tkQZsMC3aTM', // Portable sprinkler installation (Hindi)
   },
   {
     id: 6,
     name: 'Drip Irrigation',
     description: 'Drip irrigation delivers water directly to the root zone through emitters, saving water and nutrients.',
     imageUrl: 'https://images.unsplash.com/photo-1579651278448-5a95fcf9b173?auto=format&fit=crop&q=60&w=600',
-    videoUrl: 'https://www.youtube.com/embed/aZb6E5Ayyhg',
+    videoUrl: 'https://www.youtube.com/embed/3b5g46TJCgk', // How to install drip irrigation
   },
   {
     id: 7,
     name: 'Manual Irrigation',
-    description: 'Manual irrigation delivers water directly to the root zone through emitters, saving water and nutrients.',
+    description: 'Manual irrigation uses cans, hoses or buckets for small-scale watering or where systems aren’t available.',
     imageUrl: 'https://images.unsplash.com/photo-1579651278448-5a95fcf9b173?auto=format&fit=crop&q=60&w=600',
-    videoUrl: 'https://www.youtube.com/embed/aZb6E5Ayyhg',
+    videoUrl: 'https://www.youtube.com/embed/t1zQJITL_eo', // Affordable manual watering / small systems
   },
   {
     id: 8,
     name: 'Smart Sensor Irrigation',
-    description: 'Smart sensor irrigation delivers water directly to the root zone through emitters, saving water and nutrients.',
+    description: 'Smart sensor irrigation uses soil moisture or environmental sensors to automate watering for efficiency.',
     imageUrl: 'https://images.unsplash.com/photo-1579651278448-5a95fcf9b173?auto=format&fit=crop&q=60&w=600',
-    videoUrl: 'https://www.youtube.com/embed/aZb6E5Ayyhg',
+    videoUrl: 'https://www.youtube.com/embed/ebe6WB5fijo', // Smart irrigation with Arduino (sensor-based)
   }
 ];
 

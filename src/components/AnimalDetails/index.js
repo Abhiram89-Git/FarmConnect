@@ -87,7 +87,6 @@ function AnimalDetails() {
 
   return (
     <div className='animal'>
-      {/* Header same as Animals page */}
       <header className='header'>
         <div className="img-logo">
             <img 
@@ -107,7 +106,6 @@ function AnimalDetails() {
         </div>
       </header>
 
-      {/* Animal Details Section */}
       <div className='animal-details'>
         <div className='animaldetails'>
           <h1 className='animal-name'>{animal.name}</h1>
@@ -117,19 +115,16 @@ function AnimalDetails() {
             <button className='back-button'>← Back to Animals</button>
           </Link>
         </div>
-
         <div className='video-container'>
           <iframe
             src={animal.videoUrl}
             title={animal.name}
-            frameBorder='0'
             allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
             allowFullScreen
           ></iframe>
         </div>
       </div>
-
-      {/* Footer same as Animals page */}
+      
       <footer className='footer'>
         <Link to='/'><button>Home</button></Link>
         <Link to='/animals'><button>Animals</button></Link>

@@ -67,7 +67,6 @@ class Irrigation extends Component {
 
     return (
       <div className='irrigation'>
-        {/* Header */}
         <header className='header'>
           <div className='img-logo'>
             <img

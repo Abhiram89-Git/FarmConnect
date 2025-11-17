@@ -71,7 +71,6 @@ function IrrigationDetails() {
 
   return (
     <div className="irrigation-page">
-      {/* Header */}
       <header className="header">
         <div className="img-logo">
             <img 

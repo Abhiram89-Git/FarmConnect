@@ -618,7 +618,7 @@ class Plants extends Component {
         {/* Desktop Footer */}
         <footer className='footer'>
           <Link to='/'><button>Home</button></Link>
-          <Link to='/animals'><button>Animals</button></Link>
+          <Link to="/marketplace"><button>MarketPlace</button></Link>
           <Link to='/plants'><button>Plants</button></Link>
           <Link to='/tools'><button>Tools</button></Link>
           <Link to='/irrigation'><button>Irrigation</button></Link>
@@ -632,9 +632,9 @@ class Plants extends Component {
               <span className="mobile-nav-icon">🏠</span>
               <span className="mobile-nav-label">Home</span>
             </Link>
-            <Link to="/animals" className={`mobile-nav-item ${currentPath === '/animals' ? 'active' : ''}`}>
-              <span className="mobile-nav-icon">🐄</span>
-              <span className="mobile-nav-label">Animals</span>
+            <Link to="/marketplace" className={`mobile-nav-item ${currentPath === '/animals' ? 'active' : ''}`}>
+              <span className="mobile-nav-icon">🛒</span>
+              <span className="mobile-nav-label">MarketPlace</span>
             </Link>
             <Link to="/plants" className={`mobile-nav-item ${currentPath === '/plants' ? 'active' : ''}`}>
               <span className="mobile-nav-icon">🌱</span>

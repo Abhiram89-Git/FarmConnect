@@ -41,18 +41,6 @@ class Home extends Component {
       { id: 6, crop: 'Sugarcane', quantity: '2000 kg', price: '₹450/kg', farmer: 'Arun Kumar', phone: '+91 98765 43215', email: 'arun.kumar@farm.com', location: 'Coimbatore, Tamil Nadu', description: 'Sweet variety, ideal for jaggery production', image: '🎋' }
     ],
     newCrop: { crop: '', quantity: '', price: '', farmer: '', phone: '', email: '', location: '', description: '' },
-    landTypes: [
-      { id: 1, name: 'Loamy Soil', icon: '🌍', pH: '6.5-7.5', moisture: 'High', drainage: 'Good', fertility: 'Very High', suitableCrops: ['Rice', 'Wheat', 'Maize', 'Potato', 'Sugarcane'], requirements: { rainfall: '600-800 mm', temperature: '20-30°C', depth: '60-100 cm', organic: '3-4%' }, lastHarvest: '2024-09-15', nextPlanting: '2024-11-01', status: 'Excellent' },
-      { id: 2, name: 'Sandy Soil', icon: '🏜️', pH: '6.0-7.0', moisture: 'Low', drainage: 'Very Good', fertility: 'Low', suitableCrops: ['Peanut', 'Watermelon', 'Carrot', 'Millets', 'Pulses'], requirements: { rainfall: '400-600 mm', temperature: '25-35°C', depth: '45-60 cm', organic: '1-2%' }, lastHarvest: '2024-08-20', nextPlanting: '2024-10-15', status: 'Good' },
-      { id: 3, name: 'Clay Soil', icon: '🏔️', pH: '7.0-8.5', moisture: 'Very High', drainage: 'Poor', fertility: 'High', suitableCrops: ['Cotton', 'Sugarcane', 'Tobacco', 'Linseed', 'Gram'], requirements: { rainfall: '500-750 mm', temperature: '18-28°C', depth: '75-100 cm', organic: '2-3%' }, lastHarvest: '2024-09-10', nextPlanting: '2024-10-20', status: 'Good' },
-      { id: 4, name: 'Red Soil', icon: '🔴', pH: '5.5-7.0', moisture: 'Medium', drainage: 'Good', fertility: 'Medium', suitableCrops: ['Groundnut', 'Pigeon Pea', 'Red Chilli', 'Turmeric', 'Ginger'], requirements: { rainfall: '700-900 mm', temperature: '22-32°C', depth: '50-80 cm', organic: '2-2.5%' }, lastHarvest: '2024-09-05', nextPlanting: '2024-10-25', status: 'Excellent' }
-    ],
-    selectedLand: null,
-    sustainabilityMetrics: [
-      { label: 'Water Usage', value: 75, target: 80, unit: '%', status: 'good' },
-      { label: 'Carbon Footprint', value: 120, target: 100, unit: 'kg CO₂', status: 'warning' },
-      { label: 'Organic Ratio', value: 65, target: 70, unit: '%', status: 'good' }
-    ],
     aiAdvice: [
       { id: 1, type: 'irrigation', title: 'Optimal Irrigation Schedule', description: 'Based on weather, irrigate tomorrow at 6 AM for best results.', priority: 'high' },
       { id: 2, type: 'pest', title: 'Pest Alert: Aphids Detected', description: 'Monitor tomato plants and consider organic pest control.', priority: 'medium' },
@@ -64,8 +52,7 @@ class Home extends Component {
     showSchemes: false,
     pestGuide: [],
     showPestGuide: false,
-    forumPosts: [],
-    showForum: false,
+    showmarketPlace: false,
     loanAmount: '',
     interestRate: '',
     loanPeriod: '',
@@ -95,8 +82,7 @@ class Home extends Component {
       this.startWatchingLocation();
       this.showTipOfTheDay();
       this.fetchMarketPrices();
-      this.setState({ 
-        selectedLand: this.state.landTypes[0], 
+      this.setState({  
         districts: this.statesData['Tamil Nadu'],
         isLoading: false 
       });
@@ -128,7 +114,7 @@ class Home extends Component {
 
   // ===================== SEARCH METHODS =====================
   getSearchResults = () => {
-    const { searchInput, cropListings, governmentSchemes, pestGuide, forumPosts, marketSellPrices, marketBuyPrices } = this.state;
+    const { searchInput, cropListings, governmentSchemes, pestGuide, marketSellPrices, marketBuyPrices } = this.state;
     const query = searchInput.toLowerCase().trim();
 
     if (!query) return null;
@@ -171,17 +157,6 @@ class Home extends Component {
         pest.treatment.toLowerCase().includes(query)
       ) {
         results.pests.push(pest);
-      }
-    });
-
-    forumPosts.forEach(post => {
-      if (
-        post.title.toLowerCase().includes(query) ||
-        post.content.toLowerCase().includes(query) ||
-        post.author.toLowerCase().includes(query) ||
-        post.category.toLowerCase().includes(query)
-      ) {
-        results.forum.push(post);
       }
     });
 
@@ -263,45 +238,6 @@ class Home extends Component {
                 </div>
               ))}
             </div>
-          </div>
-        )}
-
-        {results.forum.length > 0 && (
-          <div className="search-results-section">
-            <h3>💬 Forum Posts ({results.forum.length})</h3>
-            {results.forum.map((post) => (
-              <div key={post.id} className="search-result-card forum-result">
-                <h4>{post.title}</h4>
-                <p className="result-meta">By <strong>{post.author}</strong> • {post.category}</p>
-                <p className="result-detail">{post.content}</p>
-                <p className="result-stats">{post.replies} replies • {post.views} views • {post.timestamp}</p>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {results.market.length > 0 && (
-          <div className="search-results-section">
-            <h3>📊 Market Prices ({results.market.length})</h3>
-            <div className="search-results-grid">
-              {results.market.map((item, index) => (
-                <div key={index} className={`search-result-card market-result ${item.type}-price`}>
-                  <div className="result-icon">{item.icon}</div>
-                  <h4>{item.crop}</h4>
-                  <p className="result-detail"><strong>Price:</strong> <span className="price-highlight">{item.price}</span></p>
-                  <p className="result-detail"><strong>Type:</strong> {item.type === 'sell' ? '🌾 Farmer Sells' : '🛒 Farmer Buys'}</p>
-                  <p className="result-detail"><strong>Location:</strong> {item.district}, {item.state}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {totalResults === 0 && (
-          <div className="no-results">
-            <p style={{fontSize: '24px'}}>❌</p>
-            <p style={{fontSize: '18px', fontWeight: 'bold'}}>No results found</p>
-            <p>Try searching with different keywords like crop names, farmer names, or locations</p>
           </div>
         )}
       </div>
@@ -475,10 +411,6 @@ class Home extends Component {
     this.setState({ pestAlerts: alerts });
   };
 
-  selectLand = (land) => {
-    this.setState({ selectedLand: land });
-  };
-
   handleTabChange = (tab) => {
     this.setState({ activeTab: tab });
   };
@@ -601,12 +533,12 @@ class Home extends Component {
   };
 
   generateMarketPrices = (state, district) => {
-    const farmSellCrops = { 'Cotton': { min: 55, max: 90 }, 'Paddy': { min: 40, max: 55 }, 'Chilli': { min: 75, max: 140 }, 'Groundnut': { min: 40, max: 60 }, 'Maize': { min: 15, max: 25 }, 'Gram': { min: 50, max: 85 }, 'Wheat': { min: 32, max: 48 }, 'Sugarcane': { min: 380, max: 500 }, 'Soybean': { min: 45, max: 75 }, 'Tobacco': { min: 80, max: 150 }, 'Linseed': { min: 48, max: 80 }, 'Turmeric': { min: 70, max: 130 }, 'Ginger': { min: 65, max: 120 } };
+    const farmSellCrops = { 'Cotton': { min: 55, max: 90 }, 'Paddy': { min: 40, max: 55 }, 'Chilli': { min: 75, max: 140 }, 'Groundnut': { min: 40, max: 60 }, 'Maize': { min: 15, max: 25 }, 'Gram': { min: 50, max: 85 }, 'Wheat': { min: 32, max: 48 }, 'Sugarcane': { min: 380, max: 500 }, 'Soybean': { min: 45, max: 75 }, 'Tobacco': { min: 80, max: 150 },'Turmeric': { min: 70, max: 130 }, 'Ginger': { min: 65, max: 120 } };
     const farmBuyCrops = { 'Tomato': { min: 25, max: 45 }, 'Green Chilli': { min: 40, max: 80 }, 'Onion': { min: 20, max: 40 }, 'Potato': { min: 22, max: 35 }, 'Carrot': { min: 20, max: 35 }, 'Cabbage': { min: 15, max: 30 }, 'Cucumber': { min: 15, max: 25 }, 'Brinjal': { min: 25, max: 45 }, 'Cauliflower': { min: 30, max: 55 }, 'Radish': { min: 12, max: 25 }, 'Spinach': { min: 10, max: 20 }, 'Garlic': { min: 60, max: 120 } };
 
     const sellPrices = Object.entries(farmSellCrops).map(([crop, { min, max }]) => {
       const price = Math.floor(Math.random() * (max - min + 1)) + min;
-      return { crop, price: `₹${price}/kg`, priceValue: price, type: 'sell', category: 'Farm Produce', icon: '🌾', district, state, updatedAt: new Date().toLocaleDateString() };
+      return { crop, price: `₹${price}/kg`, priceValue: price, type: 'sell', category: 'Farm Produce', icon: '🌾', district, state, updatedAt: new Date().toLocaleDateString() }; 
     });
 
     const buyPrices = Object.entries(farmBuyCrops).map(([crop, { min, max }]) => {
@@ -672,7 +604,7 @@ class Home extends Component {
         showCropCalendar: false,
         showSchemes: false,
         showPestGuide: false,
-        showForum: false,
+        showmarketPlace: false,
         showLoanCalculator: false,
         showForecast: false
       });
@@ -682,7 +614,7 @@ class Home extends Component {
         showCropCalendar: featureName === 'calendar',
         showSchemes: featureName === 'schemes',
         showPestGuide: featureName === 'pests',
-        showForum: featureName === 'forum',
+        showmarketPlace: featureName === 'forum',
         showLoanCalculator: featureName === 'loan',
         showForecast: featureName === 'forecast'
       });
@@ -701,7 +633,7 @@ class Home extends Component {
   };
 
   render() {
-    const { isLoading, darkMode, searchInput, weather, locationError, isLoadingWeather, tipOfTheDay, marketSellPrices, marketBuyPrices, isMarketLoading, pestAlerts, landTypes, selectedLand, sustainabilityMetrics, aiAdvice, activeTab, districts, selectedDistrict, showLocationModal, userLocation, cropCalendar, showCropCalendar, governmentSchemes, showSchemes, pestGuide, showPestGuide, forumPosts, showForum, loanAmount, interestRate, loanPeriod, loanResult, showLoanCalculator, weatherForecast, showForecast, cropListings, showUploadForm, newCrop, isAIChatOpen, aiMessages, aiInput, isAILoading } = this.state;
+    const { isLoading, darkMode, searchInput, weather, locationError, isLoadingWeather, tipOfTheDay, marketSellPrices, marketBuyPrices, isMarketLoading, pestAlerts, districts, selectedDistrict, showLocationModal, userLocation, cropCalendar, showCropCalendar, governmentSchemes, showSchemes, pestGuide, showPestGuide, showmarketPlace, loanAmount, interestRate, loanPeriod, loanResult, showLoanCalculator, weatherForecast, showForecast, cropListings, showUploadForm, newCrop, isAIChatOpen, aiMessages, aiInput, isAILoading } = this.state;
     
     const currentPath = window.location.pathname;
 
@@ -791,18 +723,16 @@ class Home extends Component {
                 <p className="weather-time">Time: {weather.time}</p>
                 <button onClick={this.refreshWeather} className='refresh water-btn'>🔄 Refresh Location</button>
               </div>
-            ) : (
-              locationError && <p className="error">{locationError}</p>
-            )}
+            ) : (locationError && <p className="error">{locationError}</p>)}
           </div>
 
           <div className="feature-buttons">
-            <button className={`feature-btn ${this.state.activeFeature === 'calendar' ? 'active' : ''}`} onClick={() => this.toggleFeature('calendar')} disabled={this.state.activeFeature && this.state.activeFeature !== 'calendar'}>📅 Calendar</button>
-            <button className={`feature-btn ${this.state.activeFeature === 'schemes' ? 'active' : ''}`} onClick={() => this.toggleFeature('schemes')} disabled={this.state.activeFeature && this.state.activeFeature !== 'schemes'}>🏛️ Schemes</button>
-            <button className={`feature-btn ${this.state.activeFeature === 'pests' ? 'active' : ''}`} onClick={() => this.toggleFeature('pests')} disabled={this.state.activeFeature && this.state.activeFeature !== 'pests'}>🐛 Pests</button>
-            <button className={`feature-btn ${this.state.activeFeature === 'forum' ? 'active' : ''}`} onClick={() => this.toggleFeature('forum')} disabled={this.state.activeFeature && this.state.activeFeature !== 'forum'}>💬 Forum</button>
-            <button className={`feature-btn ${this.state.activeFeature === 'loan' ? 'active' : ''}`} onClick={() => this.toggleFeature('loan')} disabled={this.state.activeFeature && this.state.activeFeature !== 'loan'}>💰 Loan</button>
-            <button className={`feature-btn ${this.state.activeFeature === 'forecast' ? 'active' : ''}`} onClick={() => this.toggleFeature('forecast')} disabled={this.state.activeFeature && this.state.activeFeature !== 'forecast'}>🌤️ Forecast</button>
+            <button className={`feature-btn ${this.state.activeFeature === 'calendar' ? 'active' : ''}`} onClick={() => this.toggleFeature('calendar')}>📅 Calendar</button>
+            <button className={`feature-btn ${this.state.activeFeature === 'schemes' ? 'active' : ''}`} onClick={() => this.toggleFeature('schemes')}>🏛️ Schemes</button>
+            <button className={`feature-btn ${this.state.activeFeature === 'pests' ? 'active' : ''}`} onClick={() => this.toggleFeature('pests')}>🐛 Pests</button>
+            <button className={`feature-btn ${this.state.activeFeature === 'forum' ? 'active' : ''}`} onClick={() => this.toggleFeature('forum')} >🛍️ MarketPlace</button>
+            <button className={`feature-btn ${this.state.activeFeature === 'loan' ? 'active' : ''}`} onClick={() => this.toggleFeature('loan')}>💰 Loan</button>
+            <button className={`feature-btn ${this.state.activeFeature === 'forecast' ? 'active' : ''}`} onClick={() => this.toggleFeature('forecast')}>🌤️ Forecast</button>
           </div>
 
           {showCropCalendar && (
@@ -858,24 +788,24 @@ class Home extends Component {
                       </div>
                     </div>
                     <div className="pest-section">
-                      <h4>Affects Crops:</h4>
+                      <h4 style={{ fontSize: '1.2rem', color: '#6b7280' }}>Affects Crops:</h4>
                       <ul className="pest-list">
                         {pest.crops.map((crop, index) => (<li key={index}>{crop}</li>))}
                       </ul>
                     </div>
                     <div className="pest-section">
-                      <h4>Symptoms:</h4>
+                      <h4 style={{ fontSize: '1.2rem', color: '#6b7280' }}>Symptoms:</h4>
                       <ul className="pest-list">
                         {pest.symptoms.map((symptom, index) => (<li key={index}>{symptom}</li>))}
                       </ul>
                     </div>
                     <div className="pest-section">
-                      <h4>Treatment:</h4>
-                      <p style={{ fontSize: '0.9rem', color: '#6b7280' }}>{pest.treatment}</p>
+                      <h4 style={{ fontSize: '1.2rem', color: '#6b7280' }}>Treatment:</h4>
+                      <p style={{ fontSize: '1.0rem', color: '#6b7280' }}>{pest.treatment}</p>
                     </div>
                     <div className="pest-section">
-                      <h4>Prevention:</h4>
-                      <p style={{ fontSize: '0.9rem', color: '#6b7280' }}>{pest.prevention}</p>
+                      <h4 style={{ fontSize: '1.2rem', color: '#6b7280' }}>Prevention:</h4>
+                      <p style={{ fontSize: '1.0rem', color: '#6b7280' }}>{pest.prevention}</p>
                     </div>
                   </div>
                 ))}
@@ -883,137 +813,8 @@ class Home extends Component {
             </div>
           )}
 
-          {showForum && (
-            <div className="crop-calendar">
-              <h2>💬 Farmer Community Forum</h2>
-              <div className="forum-section">
-                {forumPosts.map((post) => (
-                  <div key={post.id} className="forum-post">
-                    <div className="forum-title">{post.title}</div>
-                    <div className="forum-meta">
-                      <span>By {post.author}</span>
-                      <span className="forum-category">{post.category}</span>
-                      <span>{post.replies} replies</span>
-                      <span>{post.views} views</span>
-                      <span>{post.timestamp}</span>
-                    </div>
-                    <div className="forum-content">{post.content}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {showLoanCalculator && (
-            <div className="loan-calculator">
-              <h2>💰 Agricultural Loan Calculator</h2>
-              <div className="loan-form">
-                <div className="form-group">
-                  <label>Loan Amount (₹)</label>
-                  <input type="number" value={loanAmount} onChange={(e) => this.setState({ loanAmount: e.target.value })} placeholder="Enter amount" />
-                </div>
-                <div className="form-group">
-                  <label>Interest Rate (%)</label>
-                  <input type="number" value={interestRate} onChange={(e) => this.setState({ interestRate: e.target.value })} placeholder="Enter rate" />
-                </div>
-                <div className="form-group">
-                  <label>Loan Period (months)</label>
-                  <input type="number" value={loanPeriod} onChange={(e) => this.setState({ loanPeriod: e.target.value })} placeholder="Enter months" />
-                </div>
-              </div>
-              <button className="calculate-btn" onClick={this.calculateLoan}>Calculate EMI</button>
-              {loanResult.emi > 0 && (
-                <div className="loan-results">
-                  <h3>Loan Details</h3>
-                  <div className="result-item">
-                    <span>Monthly EMI:</span>
-                    <span className="result-value">₹{loanResult.emi}</span>
-                  </div>
-                  <div className="result-item">
-                    <span>Total Amount:</span>
-                    <span className="result-value">₹{loanResult.total}</span>
-                  </div>
-                  <div className="result-item">
-                    <span>Total Interest:</span>
-                    <span className="result-value">₹{loanResult.interest}</span>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {showForecast && (
-            <div className="weather-forecast">
-              <h2>🌤️ 7-Day Weather Forecast</h2>
-              <div className="forecast-grid">
-                {weatherForecast.map((day, index) => (
-                  <div key={index} className="forecast-day">
-                    <div className="forecast-day-name">{day.day}</div>
-                    <div className="forecast-icon">{day.icon}</div>
-                    <div className="forecast-temp">{day.temp}°C</div>
-                    <div className="forecast-condition">{day.condition}</div>
-                    <div className="forecast-precipitation">💧 {day.precipitation}%</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="tab-navigation">
-            <button className={`tab-button ${activeTab === 'overview' ? 'active' : ''}`} onClick={() => this.handleTabChange('overview')}>Overview</button>
-            <button className={`tab-button ${activeTab === 'land' ? 'active' : ''}`} onClick={() => this.handleTabChange('land')}>Land Details</button>
-            <button className={`tab-button ${activeTab === 'sustainability' ? 'active' : ''}`} onClick={() => this.handleTabChange('sustainability')}>Sustainability</button>
-            <button className={`tab-button ${activeTab === 'ai' ? 'active' : ''}`} onClick={() => this.handleTabChange('ai')}>AI Assistant</button>
-          </div>
-
-          {activeTab === 'overview' && (
-            <div className="tab-content">
-              <div className="market-section">
-                <div className="market-header">
-                  <div><h2>📍 Market Prices - {userLocation.district}, {userLocation.state}</h2></div>
-                  <button className="location-btn" onClick={this.toggleLocationModal}>📍 Change Location</button>
-                </div>
-                {isMarketLoading ? (
-                  <div className="loader">📈 Loading Prices...</div>
-                ) : (
-                  <div className="market-container">
-                    <div className="market-half sell-section">
-                      <div className="section-header">
-                        <h3 className='section-header-heading'>🌾 Farmer SELL (Produce)</h3>
-                      </div>
-                      <div className="market-grid">
-                        {marketSellPrices.map((item, index) => (
-                          <div key={index} className="market-card sell-card">
-                            <p className="crop-name"><strong>{item.crop}</strong></p>
-                            <div className="price-box sell-price-box">
-                              <span className="price-value">{item.price}</span>
-                            </div>
-                            <p className="update-time">Updated: {item.updatedAt}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="market-half buy-section">
-                      <div className="section-header">
-                        <h3 className='section-header-heading1'>🛒 Farmer BUY (Consumption)</h3>
-                      </div>
-                      <div className="market-grid">
-                        {marketBuyPrices.map((item, index) => (
-                          <div key={index} className="market-card buy-card">
-                            <p className="crop-name"><strong>{item.crop}</strong></p>
-                            <div className="price-box buy-price-box">
-                              <span className="price-value">{item.price}</span>
-                            </div>
-                            <p className="update-time">Updated: {item.updatedAt}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="sell-buy">
+          {showmarketPlace && (
+            <div className="sell-buy">
                 <div className="sell-buy-section">
                   <div className="sell-buy-header">
                     <h2>🌾 Buy & Sell Crops</h2>
@@ -1120,115 +921,114 @@ class Home extends Component {
                   </div>
                 </div>
               </div>
+          )}
+
+          {showLoanCalculator && (
+            <div className="loan-calculator">
+              <h2>💰 Agricultural Loan Calculator</h2>
+              <div className="loan-form">
+                <div className="form-group">
+                  <label>Loan Amount (₹)</label>
+                  <input type="number" value={loanAmount} onChange={(e) => this.setState({ loanAmount: e.target.value })} placeholder="Enter amount" />
+                </div>
+                <div className="form-group">
+                  <label>Interest Rate (%)</label>
+                  <input type="number" value={interestRate} onChange={(e) => this.setState({ interestRate: e.target.value })} placeholder="Enter rate" />
+                </div>
+                <div className="form-group">
+                  <label>Loan Period (months)</label>
+                  <input type="number" value={loanPeriod} onChange={(e) => this.setState({ loanPeriod: e.target.value })} placeholder="Enter months" />
+                </div>
+              </div>
+              <button className="calculate-btn" onClick={this.calculateLoan}>Calculate EMI</button>
+              {loanResult.emi > 0 && (
+                <div className="loan-results">
+                  <h3>Loan Details</h3>
+                  <div className="result-item">
+                    <span>Monthly EMI:</span>
+                    <span className="result-value">₹{loanResult.emi}</span>
+                  </div>
+                  <div className="result-item">
+                    <span>Total Amount:</span>
+                    <span className="result-value">₹{loanResult.total}</span>
+                  </div>
+                  <div className="result-item">
+                    <span>Total Interest:</span>
+                    <span className="result-value">₹{loanResult.interest}</span>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
-          {activeTab === 'land' && (
-            <div className="tab-content">
-              <div className="land-details-section">
-                <h2>🚜 Land Details & Crop Suitability</h2>
-                <div className="land-selector">
-                  <h3>Select Your Land Type:</h3>
-                  <div className="land-type-grid">
-                    {landTypes.map((land) => (
-                      <div key={land.id} className={`land-type-card ${selectedLand?.id === land.id ? 'active' : ''}`} onClick={() => this.selectLand(land)}>
-                        <span className="land-icon">{land.icon}</span>
-                        <h4>{land.name}</h4>
-                      </div>
-                    ))}
+          {showForecast && (
+            <div className="weather-forecast">
+              <h2>🌤️ 7-Day Weather Forecast</h2>
+              <div className="forecast-grid">
+                {weatherForecast.map((day, index) => (
+                  <div key={index} className="forecast-day">
+                    <div className="forecast-day-name">{day.day}</div>
+                    <div className="forecast-icon">{day.icon}</div>
+                    <div className="forecast-temp">{day.temp}°C</div>
+                    <div className="forecast-condition">{day.condition}</div>
+                    <div className="forecast-precipitation">💧 {day.precipitation}%</div>
                   </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
+            <div className="tab-content">
+              <div className="market-section">
+                <div className="market-header">
+                  <div><h2>📍 Market Prices - {userLocation.district}, {userLocation.state}</h2></div>
+                  <button className="location-btn" onClick={this.toggleLocationModal}>📍 Change Location</button>
                 </div>
-
-                {selectedLand && (
-                  <div className="land-details">
-                    <h3>Details for {selectedLand.name}</h3>
-                    <div className="land-info-grid">
-                      <div className="info-card">
-                        <h4>Soil Properties</h4>
-                        <p><strong>pH Level:</strong> {selectedLand.pH}</p>
-                        <p><strong>Moisture:</strong> {selectedLand.moisture}</p>
-                        <p><strong>Drainage:</strong> {selectedLand.drainage}</p>
-                        <p><strong>Fertility:</strong> {selectedLand.fertility}</p>
+                {isMarketLoading ? (
+                  <div className="loader">📈 Loading Prices...</div>
+                ) : (
+                  <div className="market-container">
+                    <div className="market-half sell-section">
+                      <div className="section-header">
+                        <h3 className='section-header-heading'>🌾 Farmer SELL (Produce)</h3>
                       </div>
-                      <div className="info-card">
-                        <h4>Requirements</h4>
-                        <p><strong>Rainfall:</strong> {selectedLand.requirements.rainfall}</p>
-                        <p><strong>Temperature:</strong> {selectedLand.requirements.temperature}</p>
-                        <p><strong>Depth:</strong> {selectedLand.requirements.depth}</p>
-                        <p><strong>Organic Matter:</strong> {selectedLand.requirements.organic}</p>
-                      </div>
-                      <div className="info-card">
-                        <h4>Farming Schedule</h4>
-                        <p><strong>Last Harvest:</strong> {selectedLand.lastHarvest}</p>
-                        <p><strong>Next Planting:</strong> {selectedLand.nextPlanting}</p>
-                        <p><strong>Status:</strong> <span style={{ color: this.getStatusColor(selectedLand.status) }}>{selectedLand.status}</span></p>
+                      <div className="market-grid">
+                        {marketSellPrices.map((item, index) => (
+                          <div key={index} className="market-card sell-card">
+                            <p className="crop-name"><strong>{item.crop}</strong></p>
+                            <div className="price-box sell-price-box">
+                              <span className="price-value">{item.price}</span>
+                            </div>
+                            <p className="update-time">Updated: {item.updatedAt}</p>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                    <div className="suitable-crops">
-                      <h4>Suitable Crops:</h4>
-                      <div className="crops-list">
-                        {selectedLand.suitableCrops.map((crop, index) => (
-                          <span key={index} className="crop-badge">{crop}</span>
+                    <div className="market-half buy-section">
+                      <div className="section-header">
+                        <h3 className='section-header-heading1'>🛒 Farmer BUY (Consumption)</h3>
+                      </div>
+                      <div className="market-grid">
+                        {marketBuyPrices.map((item, index) => (
+                          <div key={index} className="market-card buy-card">
+                            <p className="crop-name"><strong>{item.crop}</strong></p>
+                            <div className="price-box buy-price-box">
+                              <span className="price-value">{item.price}</span>
+                            </div>
+                            <p className="update-time">Updated: {item.updatedAt}</p>
+                          </div>
                         ))}
                       </div>
                     </div>
                   </div>
                 )}
-              </div>
+              </div>  
             </div>
-          )}
-
-          {activeTab === 'sustainability' && (
-            <div className="tab-content">
-              <div className="sustainability-section">
-                <h2>🌱 Sustainability Metrics</h2>
-                <div className="metrics-grid">
-                  {sustainabilityMetrics.map((metric, index) => (
-                    <div key={index} className="metric-card">
-                      <h4>{metric.label}</h4>
-                      <div className="metric-value" style={{ color: this.getStatusColor(metric.status) }}>
-                        {metric.value} {metric.unit}
-                      </div>
-                      <div className="metric-target">Target: {metric.target} {metric.unit}</div>
-                      <div className="progress-bar">
-                        <div 
-                          className="progress-fill" 
-                          style={{ 
-                            width: `${(metric.value / metric.target) * 100}%`,
-                            backgroundColor: this.getStatusColor(metric.status)
-                          }}
-                        ></div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'ai' && (
-            <div className="tab-content">
-              <div className="ai-assistant-section">
-                <h2>🤖 AI-Powered Farming Advice</h2>
-                <div className="ai-advice-grid">
-                  {aiAdvice.map((advice) => (
-                    <div key={advice.id} className="advice-card">
-                      <div className="advice-header">
-                        <h4>{advice.title}</h4>
-                        <span className="priority-badge" style={{ backgroundColor: this.getPriorityColor(advice.priority) }}>{advice.priority}</span>
-                      </div>
-                      <p className="advice-description">{advice.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
         </div>
 
         <footer className="footer">
           <Link to="/"><button>Home</button></Link>
-          <Link to="/animals"><button>Animals</button></Link>
+          <Link to="/marketplace"><button>MarketPlace</button></Link>
           <Link to="/plants"><button>Plants</button></Link>
           <Link to="/tools"><button>Tools</button></Link>
           <Link to="/irrigation"><button>Irrigation</button></Link>
@@ -1241,9 +1041,9 @@ class Home extends Component {
               <span className="mobile-nav-icon">🏠</span>
               <span className="mobile-nav-label">Home</span>
             </Link>
-            <Link to="/animals" className={`mobile-nav-item ${currentPath === '/animals' ? 'active' : ''}`}>
-              <span className="mobile-nav-icon">🐄</span>
-              <span className="mobile-nav-label">Animals</span>
+            <Link to="/marketplace" className={`mobile-nav-item ${currentPath === '/animals' ? 'active' : ''}`}>
+              <span className="mobile-nav-icon">🛒</span>
+              <span className="mobile-nav-label">MarketPlace</span>
             </Link>
             <Link to="/plants" className={`mobile-nav-item ${currentPath === '/plants' ? 'active' : ''}`}>
               <span className="mobile-nav-icon">🌱</span>
@@ -1344,7 +1144,7 @@ class Home extends Component {
                   disabled={isAILoading || !aiInput.trim()}
                   aria-label="Send message"
                 >
-                  ➤
+                ➤
                 </button>
               </div>
             </div>

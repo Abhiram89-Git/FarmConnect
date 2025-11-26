@@ -1,53 +1,926 @@
-.crop{
-    height: 100vh;
-    width: 100vw;
+/* ==================== GLOBAL STYLES ==================== */
+.enhanced-crops-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+  padding-bottom: 80px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
 }
-ul{
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-}
-.crop-li{
-    background-color: rgb(226, 91, 38);
-    border-radius: 10px;
-    margin: 8px;
-    width: 300px;
-    padding: 5px;
-}
-.crop-categories{
-    font-size: 25px;
-    padding: 15px;
-    text-decoration: none;
-    text-align: center;
-    color: white;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
-.footer {
-  position: fixed;        /* Fix it at the bottom */
-  bottom: 0;              /* Stick to bottom */
-  left: 0;                /* Start from left */
-  width: 100%;            /* Full width */
-  background: #fafaf6;
+
+/* ==================== HEADER ==================== */
+
+/* ==================== FILTER BAR ==================== */
+.crops-filter-bar {
+  background: white;
+  padding: 24px 40px;
+  margin: 25px 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   display: flex;
-  gap: 18px;
-  justify-content: space-around;
-  padding: 16px 0;
-  box-shadow: 0 -2px 8px rgba(88,169,116,0.05);
-  z-index: 1000;          /* Make sure it stays on top of content */
+  gap: 40px;
+  align-items: center;
+  flex-wrap: wrap;
+  border: 1px solid rgba(16, 185, 129, 0.1);
 }
 
-.footer button {
-  background: #58a974;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 30px;
-  font-size: 1.05rem;
-  font-family: inherit;
+.filter-section,
+.sort-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.filter-label-text {
+  font-weight: 700;
+  color: #1a202c;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-buttons-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.crop-filter-btn {
+  padding: 10px 18px;
+  border: 2px solid #e2e8f0;
+  background: white;
+  border-radius: 25px;
   cursor: pointer;
-  transition: background 0.2s;
+  font-size: 14px;
+  font-weight: 600;
+  color: #4b5563;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
-.footer button:hover {
-  background: #417c54;
+.crop-filter-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: #10b981;
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.crop-filter-btn:hover {
+  border-color: #10b981;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.crop-filter-btn:hover::before {
+  left: 0;
+}
+
+.crop-filter-btn.active {
+  background: #10b981;
+  color: white;
+  border-color: #10b981;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  transform: translateY(-2px);
+}
+
+.crop-sort-select {
+  padding: 10px 18px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a202c;
+  transition: all 0.3s ease;
+}
+
+.crop-sort-select:hover,
+.crop-sort-select:focus {
+  border-color: #10b981;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.crop-clear-btn {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.crop-clear-btn:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+}
+
+/* ==================== RESULTS INFO ==================== */
+.crops-results-info {
+  padding: 16px 40px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(5, 150, 105, 0.08) 100%);
+  margin: 0 40px 25px 40px;
+  border-radius: 12px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  font-weight: 600;
+  color: #059669;
+  font-size: 15px;
+}
+
+/* ==================== CROPS MAIN CONTAINER ==================== */
+.crops-main-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.crops-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+  padding: 0;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================== CROP CARD ==================== */
+.crop-card-enhanced {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 16px;
+  padding: 24px;
+  border: 2px solid #f0f0f0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.crop-card-enhanced:hover {
+  transform: translateY(-12px);
+  border-color: #10b981;
+  box-shadow: 0 12px 32px rgba(16, 185, 129, 0.2);
+}
+
+.crop-recommended-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+}
+
+.crop-card-header {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 16px;
+  align-items: flex-start;
+}
+
+.crop-emoji-large {
+  font-size: 48px;
+  min-width: 55px;
+  text-align: center;
+}
+
+.crop-header-info {
+  flex: 1;
+}
+
+.crop-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1a202c;
+  margin-bottom: 6px;
+}
+
+.crop-type-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 100%);
+  color: #0369a1;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.crop-rating {
+  font-size: 13px;
+  color: #f39c12;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rating-count {
+  color: #718096;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.crop-description {
+  font-size: 13px;
+  color: #4b5563;
+  margin-bottom: 14px;
+  line-height: 1.5;
+  background: rgba(16, 185, 129, 0.05);
+  padding: 10px;
+  border-radius: 8px;
+  border-left: 3px solid #10b981;
+}
+
+/* ==================== CROP SPECS GRID ==================== */
+.crop-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 10px;
+}
+
+.crop-spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  text-align: center;
+}
+
+.spec-emoji {
+  font-size: 20px;
+}
+
+.spec-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.spec-value {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a202c;
+}
+
+/* ==================== VARIETIES ==================== */
+.crop-varieties {
+  margin-bottom: 12px;
+}
+
+.varieties-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1a202c;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.varieties-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.variety-tag {
+  display: inline-block;
+  background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+  color: #be185d;
+  padding: 5px 10px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid #fbcfe8;
+  transition: all 0.2s ease;
+}
+
+.variety-tag:hover {
+  background: linear-gradient(135deg, #fbcfe8 0%, #f8bbd0 100%);
+  transform: scale(1.05);
+}
+
+/* ==================== SOIL INFO ==================== */
+.crop-soil-info {
+  margin-bottom: 12px;
+  padding: 10px;
+  background: rgba(59, 130, 246, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid #3b82f6;
+}
+
+.soil-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #3b82f6;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.soil-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.soil-badge {
+  display: inline-block;
+  background: #dbeafe;
+  color: #1e40af;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ==================== BENEFITS ==================== */
+.crop-benefits {
+  margin-bottom: 12px;
+  padding: 10px;
+  background: rgba(34, 197, 94, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid #22c55e;
+}
+
+.benefits-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #15803d;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.benefits-text {
+  font-size: 12px;
+  color: #1a202c;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* ==================== PRICE INFO ==================== */
+.crop-price-info {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.price-item {
+  flex: 1;
+  background: linear-gradient(135deg, #fef5e7 0%, #fef8dc 100%);
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #f9e79f;
+}
+
+.price-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #7d6608;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.price-display {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1a202c;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.price-change {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 5px;
+  background: #10b981;
+  color: white;
+  display: inline-block;
+}
+
+.price-change.down {
+  background: #ef4444;
+}
+
+.export-badge {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 10px;
+}
+
+.export-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #4b5563;
+  text-transform: uppercase;
+}
+
+.export-value {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a202c;
+}
+
+/* ==================== TIPS ==================== */
+.crop-tips {
+  margin-bottom: 12px;
+  padding: 10px;
+  background: rgba(245, 158, 11, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid #f59e0b;
+}
+
+.tips-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #b45309;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.tips-text {
+  font-size: 12px;
+  color: #1a202c;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* ==================== CONTACT ==================== */
+.crop-contact {
+  display: flex;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid #ecf0f1;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #1a202c;
+  background: #e8f8f5;
+  padding: 6px 10px;
+  border-radius: 6px;
+  flex: 1;
+  min-width: 100px;
+  justify-content: center;
+}
+
+.contact-item svg {
+  color: #10b981;
+  font-size: 13px;
+}
+
+.suppliers-count {
+  display: block;
+}
+
+/* ==================== NO RESULTS ==================== */
+.crops-no-results {
+  text-align: center;
+  padding: 60px 30px;
+  background: white;
+  border-radius: 12px;
+  color: #718096;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+
+/* ==================== MOBILE NAV ==================== */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 2px solid #ecf0f1;
+  z-index: 98;
+}
+
+.mobile-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 5px;
+  padding: 8px 5px;
+}
+
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-decoration: none;
+  padding: 8px 5px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  color: #718096;
+}
+
+.mobile-nav-item:hover,
+.mobile-nav-item.active {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.mobile-nav-icon {
+  font-size: 24px;
+}
+
+.mobile-nav-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+@media (max-width: 1200px) {
+  .crops-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 18px;
+  }
+
+  .crops-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+    padding: 18px;
+    margin: 15px;
+  }
+
+  .sort-section {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .crops-main-container {
+    padding: 0 15px;
+  }
+
+  .crops-results-info {
+    margin: 0 15px 15px 15px;
+    padding: 12px 15px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .header {
+    padding: 15px 20px;
+  }
+
+  .search-bar {
+    width: 260px;
+  }
+
+  .crops-filter-bar {
+    gap: 15px;
+  }
+
+  .crop-filter-btn {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .enhanced-crops-container {
+    padding-bottom: 100px;
+  }
+
+  .header {
+    padding: 12px 12px;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .heading {
+    font-size: 22px;
+  }
+
+  .search-bar {
+    width: 100%;
+    padding: 8px 16px;
+  }
+
+  .crops-filter-bar {
+    padding: 12px;
+    margin: 12px;
+    gap: 10px;
+    flex-direction: column;
+  }
+
+  .filter-section,
+  .sort-section {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .filter-buttons-container {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .crop-filter-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+    flex: 1;
+  }
+
+  .crop-sort-select,
+  .crop-clear-btn {
+    width: 100%;
+  }
+
+  .crops-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .crop-card-enhanced {
+    padding: 16px;
+  }
+
+  .crop-specs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .crop-emoji-large {
+    font-size: 40px;
+    min-width: 45px;
+  }
+
+  .crop-name {
+    font-size: 16px;
+  }
+
+
+  .mobile-nav {
+    display: block;
+  }
+}
+
+@media (max-width: 640px) {
+  .header {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .heading {
+    font-size: 20px;
+  }
+
+  .search-bar {
+    width: 100%;
+    padding: 6px 12px;
+  }
+
+  .crops-grid {
+    gap: 10px;
+  }
+
+  .crop-filter-btn {
+    flex: 0 1 calc(50% - 4px);
+    padding: 7px 10px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .enhanced-crops-container {
+    padding-bottom: 110px;
+  }
+
+  .header {
+    padding: 8px;
+  }
+
+  .logo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .heading {
+    font-size: 18px;
+  }
+
+  .search-bar {
+    padding: 5px 10px;
+  }
+
+  .search-input {
+    font-size: 13px;
+  }
+
+  .crops-filter-bar {
+    padding: 8px;
+    margin: 8px;
+  }
+
+  .filter-label-text {
+    font-size: 12px;
+  }
+
+  .crop-filter-btn {
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+
+  .crop-sort-select,
+  .crop-clear-btn {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+
+  .crops-results-info {
+    margin: 8px;
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .crops-main-container {
+    padding: 0 8px;
+  }
+
+  .crops-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .crop-card-enhanced {
+    padding: 12px;
+  }
+
+  .crop-emoji-large {
+    font-size: 36px;
+  }
+
+  .crop-name {
+    font-size: 14px;
+  }
+
+  .crop-type-badge {
+    font-size: 10px;
+  }
+
+  .crop-description {
+    font-size: 11px;
+    padding: 6px;
+  }
+
+  .crop-specs-grid {
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .spec-emoji {
+    font-size: 16px;
+  }
+
+  .spec-label {
+    font-size: 9px;
+  }
+
+  .spec-value {
+    font-size: 11px;
+  }
+
+  .crop-varieties,
+  .crop-soil-info,
+  .crop-benefits,
+  .crop-tips {
+    margin-bottom: 8px;
+    padding: 8px;
+  }
+
+  .varieties-label,
+  .soil-label,
+  .benefits-label,
+  .tips-label {
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+
+  .variety-tag,
+  .soil-badge {
+    font-size: 9px;
+    padding: 3px 8px;
+  }
+
+  .crop-price-info {
+    gap: 8px;
+  }
+
+  .price-item,
+  .export-badge {
+    padding: 8px;
+  }
+
+  .price-label {
+    font-size: 10px;
+  }
+
+  .price-display {
+    font-size: 13px;
+  }
+
+  .export-label {
+    font-size: 10px;
+  }
+
+  .crop-contact {
+    gap: 6px;
+    padding-top: 8px;
+  }
+
+  .contact-item {
+    font-size: 10px;
+    padding: 5px 8px;
+    min-width: 90px;
+  }
+
+  .mobile-nav-grid {
+    gap: 2px;
+    padding: 4px 2px;
+  }
+
+  .mobile-nav-icon {
+    font-size: 18px;
+  }
+
+  .mobile-nav-label {
+    font-size: 7px;
+  }
+}
+
+@media (max-width: 360px) {
+  .heading {
+    font-size: 16px;
+  }
+
+  .crop-card-enhanced {
+    padding: 10px;
+  }
+
+  .crop-name {
+    font-size: 13px;
+  }
+
+  .crop-emoji-large {
+    font-size: 32px;
+  }
 }

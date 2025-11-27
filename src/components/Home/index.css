@@ -25,13 +25,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 20px;
-  background: #58a974;
+  align-self: center;
+  padding: 10px;
+  background: linear-gradient(to right,#58a974);
   color: #fff;
   position: sticky;
   top: 0;
-  height: 75px;
+  height: 90px;
   z-index: 10;
+  padding: 20px;
 }
 
 .img-logo {
@@ -2307,11 +2309,13 @@ body.dark-mode .welcome-para {
   
   /* Header Responsive */
   .header {
+    display: flex;
     flex-direction: row;
+    align-items: start;
     flex-wrap: wrap;
-    padding: 0.8rem 1rem;
+    padding: 20px;
     height: auto;
-    gap: 0.8rem;
+    gap: 15px;
   }
 
   .img-logo {
@@ -3958,4 +3962,551 @@ body.dark-mode .mobile-nav-item:active {
 .dark-mode .result-category {
   background: #1e3a8a;
   color: #93c5fd;
+}
+.profile-popup {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  width: 320px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.dark-mode .profile-popup {
+  background: #1f2937;
+  color: white;
+}
+
+.profile-image-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.dark-mode .profile-image-section {
+  border-bottom-color: #374151;
+}
+
+.image-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #3b82f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+}
+
+.dark-mode .image-preview {
+  background: #374151;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-upload-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.upload-btn {
+  background: #3b82f6;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  border: none;
+  transition: background 0.3s;
+  width: 100%;
+  text-align: center;
+}
+
+.upload-btn:hover {
+  background: #2563eb;
+}
+
+.or-text {
+  color: #9ca3af;
+  font-size: 12px;
+  margin: 5px 0;
+}
+
+.profile-popup h3 {
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: #111827;
+}
+
+.dark-mode .profile-popup h3 {
+  color: white;
+}
+
+.profile-popup label {
+  display: block;
+  margin-top: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #374151;
+  margin-bottom: 5px;
+}
+
+.dark-mode .profile-popup label {
+  color: #d1d5db;
+}
+
+.profile-popup input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.dark-mode .profile-popup input {
+  background: #374151;
+  border-color: #4b5563;
+  color: white;
+}
+
+.profile-popup input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.profile-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 80px;
+}
+
+.save-btn {
+  flex: 1;
+  padding: 10px;
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.save-btn:hover {
+  background: #059669;
+}
+
+.close-btn {
+  flex: 1;
+  padding: 10px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.close-btn:hover {
+  background: #dc2626;
+}
+
+.profile-section {
+  position: relative;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.profile-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #3b82f6;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s;
+  margin-top: 15px;
+}
+
+.profile-icon:hover {
+  transform: scale(1.05);
+}
+/* Mobile CSS for Profile Popup - Add to your index.css */
+
+/* ==================== MOBILE DEVICES (max-width: 768px) ==================== */
+
+@media (max-width: 768px) {
+  
+  .profile-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: slideUpMobile 0.3s ease-out;
+  }
+
+  @keyframes slideUpMobile {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -40%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  .dark-mode .profile-popup {
+    background: #1f2937;
+    color: white;
+  }
+
+  .profile-image-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .dark-mode .profile-image-section {
+    border-bottom-color: #374151;
+  }
+
+  .image-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #3b82f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3f4f6;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  }
+
+  .dark-mode .image-preview {
+    background: #374151;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }
+
+  .image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .image-upload-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .upload-btn {
+    background: #3b82f6;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    transition: all 0.3s;
+    width: 100%;
+    text-align: center;
+    touch-action: manipulation;
+  }
+
+  .upload-btn:active {
+    background: #2563eb;
+    transform: scale(0.98);
+  }
+
+  .upload-btn:hover {
+    background: #2563eb;
+  }
+
+  .or-text {
+    color: #9ca3af;
+    font-size: 13px;
+    margin: 8px 0;
+    font-weight: 500;
+  }
+
+  .profile-popup h3 {
+    margin-bottom: 18px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+    text-align: center;
+  }
+
+  .dark-mode .profile-popup h3 {
+    color: white;
+  }
+
+  .profile-popup label {
+    display: block;
+    margin-top: 14px;
+    font-weight: 600;
+    font-size: 15px;
+    color: #374151;
+    margin-bottom: 6px;
+  }
+
+  .dark-mode .profile-popup label {
+    color: #d1d5db;
+  }
+
+  .profile-popup input {
+    width: 100%;
+    padding: 12px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 15px;
+    box-sizing: border-box;
+    font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .dark-mode .profile-popup input {
+    background: #374151;
+    border-color: #4b5563;
+    color: white;
+  }
+
+  .profile-popup input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  }
+
+  .profile-popup input:active {
+    border-color: #3b82f6;
+  }
+
+  .form-group {
+    width: 100%;
+    margin: 14px 0;
+  }
+
+  .profile-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .save-btn {
+    flex: 1;
+    padding: 13px;
+    background: #10b981;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 15px;
+    transition: all 0.3s;
+    touch-action: manipulation;
+  }
+
+  .save-btn:active {
+    background: #059669;
+    transform: scale(0.98);
+  }
+
+  .save-btn:hover {
+    background: #059669;
+  }
+
+  .close-btn {
+    flex: 1;
+    padding: 13px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 15px;
+    transition: all 0.3s;
+    touch-action: manipulation;
+  }
+
+  .close-btn:active {
+    background: #dc2626;
+    transform: scale(0.98);
+  }
+
+  .close-btn:hover {
+    background: #dc2626;
+  }
+
+  .profile-section {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .profile-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2.5px solid #3b82f6;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s;
+    touch-action: manipulation;
+  }
+
+  .profile-icon:active {
+    transform: scale(1.1);
+  }
+
+  .profile-icon:hover {
+    transform: scale(1.05);
+  }
+
+}
+
+/* ==================== SMALL MOBILE DEVICES (max-width: 480px) ==================== */
+
+@media (max-width: 480px) {
+
+  .profile-popup {
+    width: 95%;
+    max-width: none;
+    padding: 18px;
+    border-radius: 14px;
+  }
+
+  .image-preview {
+    width: 100px;
+    height: 100px;
+    border: 3px solid #3b82f6;
+  }
+
+  .profile-popup h3 {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .profile-popup label {
+    font-size: 14px;
+    margin-top: 12px;
+  }
+
+  .profile-popup input {
+    padding: 11px;
+    font-size: 14px;
+  }
+
+  .upload-btn {
+    padding: 11px 18px;
+    font-size: 14px;
+  }
+
+  .save-btn,
+  .close-btn {
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .profile-buttons {
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .or-text {
+    font-size: 12px;
+  }
+
+}
+
+/* ==================== EXTRA SMALL DEVICES (max-width: 360px) ==================== */
+
+@media (max-width: 360px) {
+
+  .profile-popup {
+    padding: 16px;
+    width: 96%;
+  }
+
+  .image-preview {
+    width: 90px;
+    height: 90px;
+    border: 3px solid #3b82f6;
+  }
+
+  .profile-popup h3 {
+    font-size: 16px;
+    margin-bottom: 14px;
+  }
+
+  .profile-popup label {
+    font-size: 13px;
+    margin-top: 10px;
+  }
+
+  .profile-popup input {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .upload-btn {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  .save-btn,
+  .close-btn {
+    padding: 11px;
+    font-size: 13px;
+  }
+
+  .profile-section {
+    margin-right: 5px;
+  }
+
+  .profile-icon {
+    width: 42px;
+    height: 42px;
+    border: 2px solid #3b82f6;
+  }
+
 }

@@ -398,7 +398,7 @@ class Marketplace extends Component {
               <span className="mobile-nav-icon">🏠</span>
               <span className="mobile-nav-label">Home</span>
             </Link>
-            <Link to="/marketplace" className={`mobile-nav-item ${currentPath === '/animals' ? 'active' : ''}`}>
+            <Link to="/marketplace" className={`mobile-nav-item ${currentPath === '/marketplace' ? 'active' : ''}`}>
               <span className="mobile-nav-icon">🛒</span>
               <span className="mobile-nav-label">MarketPlace</span>
             </Link>

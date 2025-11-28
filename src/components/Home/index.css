@@ -583,7 +583,7 @@ h3{
 }
 
 .market-card {
-  background-color: #e6e06e;
+  background: linear-gradient(135deg, #8ec5fc 0%, #e0c3fc 100%);
   color: white;
   padding: 15px;
   width: 160px;
@@ -670,16 +670,17 @@ h3{
   }
 }
 .crop-name{
-  color:red;
+  color: #007bff;
 }
 .price-value{
-  color: #0e2955;
+  color: rgb(0, 89, 255);
   font-weight: bold;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 .update-time{
-  color: #740edb;
+  color: #008e07;
   font-weight: bold;
+  font-size: medium;
 }
 .section-header-heading {
   font-size: 2rem;
@@ -2307,48 +2308,133 @@ body.dark-mode .welcome-para {
 /* Tablets and below (768px) */
 @media screen and (max-width: 768px) {
   
-  /* Header Responsive */
-  .header {
-    display: flex;
-    flex-direction: row;
-    align-items: start;
-    flex-wrap: wrap;
-    padding: 20px;
+   .header {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    padding: 12px 16px;
     height: auto;
-    gap: 15px;
+    gap: 12px 12px;
+    background: linear-gradient(to right, #58a974);
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
   }
 
   .img-logo {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
     flex-direction: row;
-    gap: 0.5rem;
-    flex: 1;
+    gap: 8px;
+    align-items: center;
+    flex: 0 0 auto;
   }
 
   .logo {
     width: 50px;
     height: 50px;
+    border-radius: 50%;
+    flex: 0 0 auto;
   }
 
   .heading {
+    grid-column: 2;
+    grid-row: 1;
     font-size: 1.3rem;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: black;
+  }
+
+  .connect {
+    color: white;
+  }
+
+  .dark-mode-toggle {
+    grid-column: 3;
+    grid-row: 1;
+    position: static;
+    margin: 0;
+    font-size: 1.4rem;
+    padding: 0.4rem;
+    flex: 0 0 auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dark-mode-toggle:hover {
+    transform: scale(1.15);
+  }
+
+  .profile-section {
+    grid-column: 4;
+    grid-row: 1;
+    flex: 0 0 auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin: 0;
+  }
+
+  .profile-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2.5px solid #3b82f6;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s;
+    margin: 0;
+    padding: 0;
+  }
+
+  .profile-icon:hover {
+    transform: scale(1.08);
   }
 
   .search-bar {
-    order: 3;
+    grid-column: 1 / -1;
+    grid-row: 2;
     width: 100%;
-    margin-top: 0.5rem;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 8px;
+    padding: 0 10px;
   }
 
   .search-bar input {
     width: 100%;
     font-size: 0.9rem;
+    border: none;
+    outline: none;
+    padding: 8px;
+    background: transparent;
+    color: #333;
   }
 
-  .dark-mode-toggle {
-    position: static;
-    margin-left: auto;
+  .search-bar input::placeholder {
+    color: #999;
+  }
+
+  .search-icon {
     font-size: 1.5rem;
-    padding: 0.3rem;
+    color: #58a974;
+    flex: 0 0 auto;
   }
 
   /* Main Content */
@@ -2470,10 +2556,30 @@ body.dark-mode .welcome-para {
     gap: 0.6rem;
   }
 
-  .market-card {
-    width: 80%;
-    font-size: 0.85rem;
-  }
+  /* ========================================
+   MOBILE MARKET CARD - OPTIMIZED DESIGN
+   ======================================== */
+
+/* Base Market Card */
+.market-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: auto;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+
+  border-radius: 12px;
+  border-left: 5px solid #ff8c00;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
 
   .crop-name {
     font-size: 0.85rem;

@@ -1,1230 +1,948 @@
-/* ==================== GLOBAL STYLES ==================== */
-.enhanced-irrigation-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
-  padding-bottom: 80px;
-  font-family: 'Inter', 'Segoe UI', sans-serif;
-}
-
-/* ==================== FILTER BAR ==================== */
-.irrigation-filter-bar {
-  background: white;
-  padding: 24px 40px;
-  margin: 25px 40px;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  display: flex;
-  gap: 30px;
-  align-items: center;
-  flex-wrap: wrap;
-  border: 1px solid rgba(16, 185, 129, 0.1);
-}
-
-.filter-label-main {
-  font-weight: 700;
-  color: #1a202c;
-  font-size: 15px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 150px;
-}
-
-.filter-buttons-group {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.irrigation-filter-btn {
-  padding: 10px 18px;
-  border: 2px solid #e2e8f0;
-  background: white;
-  border-radius: 25px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  color: #4b5563;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
+.social-post-card {
+  background: var(--bg-white);
+  border-radius: 12px;
   overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  border: 1px solid #e5e7eb;
 }
-
-.irrigation-filter-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
+.social-main-container {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+  max-width: 1200px;
   width: 100%;
-  height: 100%;
-  background: #10b981;
-  transition: left 0.3s ease;
-  z-index: -1;
-}
-
-.irrigation-filter-btn:hover {
-  border-color: #10b981;
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
-}
-
-.irrigation-filter-btn:hover::before {
-  left: 0;
-}
-
-.irrigation-filter-btn.active {
-  background: #10b981;
-  color: white;
-  border-color: #10b981;
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-  transform: translateY(-2px);
-}
-
-.sort-clear-group {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-left: auto;
-}
-
-.irrigation-sort-select {
-  padding: 10px 18px;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  background: white;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  color: #1a202c;
-  transition: all 0.3s ease;
-}
-
-.irrigation-sort-select:hover,
-.irrigation-sort-select:focus {
-  border-color: #10b981;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-}
-
-.irrigation-clear-btn {
-  padding: 10px 24px;
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: white;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  font-size: 13px;
-  letter-spacing: 0.5px;
-}
-
-.irrigation-clear-btn:hover {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
-}
-
-/* ==================== RESULTS INFO ==================== */
-.irrigation-results-info {
-  padding: 16px 40px;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(5, 150, 105, 0.08) 100%);
-  margin: 0 40px 25px 40px;
-  border-radius: 12px;
-  border: 1px solid rgba(16, 185, 129, 0.2);
-  font-weight: 600;
-  color: #059669;
-}
-
-.irrigation-results-info p {
-  font-size: 15px;
-}
-
-/* ==================== CATEGORY SECTION ==================== */
-.irrigation-systems-container {
-  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 20px;
+  flex: 1;
 }
 
-.irrigation-category-section {
-  margin-bottom: 30px;
-  background: white;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid #ecf0f1;
+.social-sidebar {
+  position: sticky;
+  top: 100px;
+  height: fit-content;
 }
 
-.irrigation-category-toggle {
-  width: 100%;
-  padding: 24px;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+.filter-card {
+  background: var(--bg-white);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow-md);
+}
+
+.filter-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary-green);
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.filter-btn {
+  padding: 10px 15px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  background: var(--bg-light);
+  color: var(--text-dark);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.filter-btn:hover {
+  background: #f3f4f6;
+  border-color: var(--primary-green);
+}
+
+.filter-btn.active {
+  background-color: green;
   color: white;
-  border: none;
+  border-color: var(--primary-green);
+  font-weight: 700;
+}
+
+.clear-filters-btn {
+  width: 100%;
+  padding: 10px 15px;
+  background: #fef3c7;
+  color: #92400e;
+  border: 2px solid #fcd34d;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 18px;
-  font-size: 16px;
-  font-weight: 700;
-  transition: all 0.3s ease;
+  justify-content: center;
+  gap: 8px;
+  transition: var(--transition);
 }
 
-.irrigation-category-toggle:hover {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
-  transform: translateX(5px);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+.clear-filters-btn:hover {
+  background: #fde68a;
+  border-color: #f59e0b;
 }
 
-.category-emoji {
+/* ===================================
+   FEED SECTION
+   =================================== */
+
+.social-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+/* CREATE POST */
+
+.create-post-prompt {
+  background: var(--bg-white);
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  border: 2px solid #e5e7eb;
+}
+
+.create-post-prompt:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-green);
+}
+
+.create-post-avatar {
   font-size: 32px;
 }
 
-.category-info {
+.create-post-input {
   flex: 1;
-  text-align: left;
-}
-
-.category-info h2 {
-  font-size: 20px;
-  margin-bottom: 6px;
-}
-
-.category-info p {
-  font-size: 13px;
-  opacity: 0.9;
-}
-
-.toggle-chevron {
-  font-size: 12px;
-  transition: transform 0.3s ease;
-}
-
-/* ==================== SYSTEMS GRID ==================== */
-.irrigation-systems-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
-  padding: 24px;
-  animation: fadeIn 0.4s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ==================== SYSTEM CARD ==================== */
-.irrigation-system-card {
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-  border-radius: 14px;
-  padding: 20px;
-  border: 2px solid #f0f0f0;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-}
-
-.irrigation-system-card:hover {
-  transform: translateY(-12px);
-  border-color: #10b981;
-  box-shadow: 0 12px 32px rgba(16, 185, 129, 0.2);
-}
-
-.irrigation-recommended-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-  color: white;
-  padding: 6px 12px;
+  background: var(--bg-light);
+  border: none;
+  padding: 10px 15px;
   border-radius: 20px;
-  font-size: 12px;
-  font-weight: 700;
-  box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--text-light);
 }
 
-.irrigation-card-header {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 16px;
-  align-items: flex-start;
+.create-post-form {
+  background: var(--bg-white);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow-lg);
+  border: 2px solid var(--primary-green);
 }
 
-.irrigation-emoji-large {
-  font-size: 44px;
-  min-width: 50px;
-  text-align: center;
-}
-
-.irrigation-header-info {
-  flex: 1;
-}
-
-.irrigation-name {
-  font-size: 18px;
-  font-weight: 800;
-  color: #1a202c;
-  margin-bottom: 6px;
-}
-
-.irrigation-rating {
-  font-size: 13px;
-  color: #f39c12;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.irrigation-reviews {
-  color: #718096;
-  font-weight: 600;
-  font-size: 12px;
-}
-
-.irrigation-description {
-  font-size: 13px;
-  color: #4b5563;
-  margin-bottom: 14px;
-  line-height: 1.5;
-  background: rgba(16, 185, 129, 0.05);
-  padding: 10px;
+.image-preview-container {
+  position: relative;
+  margin-bottom: 15px;
   border-radius: 8px;
-  border-left: 3px solid #10b981;
+  overflow: hidden;
 }
 
-/* ==================== SPECS ==================== */
-.irrigation-specs {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 14px;
-  padding: 12px;
-  background: #f8fafc;
-  border-radius: 10px;
+.image-preview {
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
 }
 
-.spec-row {
+.remove-image-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.remove-image-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.create-post-header {
   display: flex;
   align-items: center;
   gap: 12px;
-  justify-content: space-between;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.spec-label {
-  font-size: 12px;
-  font-weight: 700;
-  color: #718096;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  min-width: 110px;
-}
-
-.spec-value {
-  font-size: 13px;
-  font-weight: 700;
-  color: #1a202c;
-  text-align: right;
-  min-width: 80px;
-}
-
-.efficiency-bar-small {
-  flex: 1;
-  height: 5px;
-  background: #e2e8f0;
-  border-radius: 10px;
-  overflow: hidden;
-  min-width: 80px;
-}
-
-.efficiency-fill-small {
-  height: 100%;
-  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
-  transition: width 0.4s ease;
-}
-
-/* ==================== BENEFITS ==================== */
-.irrigation-benefits {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 14px;
-}
-
-.irrigation-benefit-tag {
-  display: inline-block;
-  background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 100%);
-  color: #0369a1;
-  padding: 6px 12px;
-  border-radius: 16px;
-  font-size: 11px;
-  font-weight: 700;
-  border: 1px solid #06b6d4;
-  transition: all 0.2s ease;
-}
-
-.irrigation-benefit-tag:hover {
-  background: linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%);
-  transform: scale(1.05);
-}
-
-/* ==================== SUITABLE SOILS ==================== */
-.irrigation-suitable {
-  margin-bottom: 14px;
-  padding: 10px;
-  background: rgba(59, 130, 246, 0.05);
-  border-radius: 8px;
-  border-left: 3px solid #3b82f6;
-}
-
-.suitable-label {
-  font-size: 12px;
-  font-weight: 700;
-  color: #3b82f6;
-  display: block;
-  margin-bottom: 8px;
-}
-
-.soil-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.soil-tag {
-  display: inline-block;
-  background: #dbeafe;
-  color: #1e40af;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-/* ==================== PRICE INFO ==================== */
-.irrigation-price-info {
-  background: linear-gradient(135deg, #fef5e7 0%, #fef8dc 100%);
-  padding: 14px;
-  border-radius: 10px;
-  margin-bottom: 14px;
-  border: 1px solid #f9e79f;
-}
-
-.price-label {
-  font-size: 12px;
-  font-weight: 700;
-  color: #7d6608;
-  text-transform: uppercase;
-  display: block;
-  margin-bottom: 8px;
-}
-
-.price-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.price-range {
+.create-post-author {
   font-size: 16px;
-  font-weight: 800;
-  color: #1a202c;
-}
-
-.price-trend {
-  font-size: 13px;
   font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 6px;
-  background: #10b981;
-  color: white;
+  color: var(--text-dark);
 }
 
-.price-trend.down {
-  background: #ef4444;
-}
-
-/* ==================== CONTACT ==================== */
-.irrigation-contact {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 14px;
-  flex-wrap: wrap;
-}
-
-.contact-badge {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.create-post-location {
   font-size: 12px;
-  font-weight: 600;
-  color: #1a202c;
-  background: #e8f8f5;
-  padding: 8px 12px;
-  border-radius: 8px;
-  flex: 1;
-  min-width: 120px;
-  justify-content: center;
+  color: var(--text-light);
 }
 
-.contact-badge svg {
-  color: #10b981;
+.create-post-textarea {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
   font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+  transition: var(--transition);
+  margin-bottom: 15px;
 }
 
-/* ==================== MAINTENANCE ==================== */
-.irrigation-maintenance {
-  padding-top: 14px;
-  border-top: 1px solid #ecf0f1;
-  margin-top: auto;
+.create-post-textarea:focus {
+  outline: none;
+  border-color: var(--primary-green);
 }
 
-.maintenance-label {
-  font-size: 12px;
-  font-weight: 700;
-  color: #1a202c;
-  display: block;
-  margin-bottom: 6px;
+.create-post-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.maintenance-text {
-  font-size: 12px;
-  color: #4b5563;
-  line-height: 1.4;
-}
-
-/* ==================== NO RESULTS ==================== */
-.irrigation-no-results {
-  text-align: center;
-  padding: 60px 30px;
-  background: white;
-  border-radius: 12px;
-  margin: 20px 40px;
-  color: #718096;
-  font-size: 16px;
+.image-upload-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 15px;
+  background: #fef3c7;
+  color: #92400e;
+  border: 2px solid #fcd34d;
+  border-radius: 6px;
+  font-size: 13px;
   font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
 }
 
-/* ==================== MOBILE NAV ==================== */
-.mobile-nav {
+.image-upload-label:hover {
+  background: #fde68a;
+  border-color: #f59e0b;
+}
+
+.image-upload-input {
   display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: white;
-  border-top: 2px solid #ecf0f1;
-  z-index: 98;
 }
 
-.mobile-nav-grid {
+.category-select {
+  padding: 8px 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 13px;
+  background: var(--bg-light);
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.category-select:focus {
+  outline: none;
+  border-color: var(--primary-green);
+}
+
+.create-post-buttons {
+  display: flex;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.post-cancel-btn {
+  padding: 8px 20px;
+  background: #e5e7eb;
+  color: var(--text-dark);
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.post-cancel-btn:hover {
+  background: #d1d5db;
+}
+
+.post-submit-btn {
+  padding: 8px 25px;
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.post-submit-btn:hover {
+  background: var(--dark-green);
+}
+
+/* POSTS LIST */
+
+.posts-list {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 5px;
-  padding: 8px 5px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  width: 100%;
 }
 
-.mobile-nav-item {
+.social-post-card {
+  flex: 1 1 calc(50% - 10px);
+  min-width: 300px;
+}
+
+.social-post-card {
+  flex: 1 1 calc(50% - 10px);
+  min-width: 300px;
+  background: var(--bg-white);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  border: 1px solid #e5e7eb;
+}
+
+.social-post-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+/* POST HEADER */
+
+.post-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 15px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.post-author-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.post-avatar {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.post-author-details {
+  flex: 1;
+}
+
+.post-author-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+
+.post-location,
+.post-time {
+  display: flex;
+  align-items: center;
+}
+
+.post-category {
+  background: linear-gradient(135deg, var(--light-green), #d1fae5);
+  color: var(--primary-green);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.post-menu-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 5px;
+  transition: var(--transition);
+}
+
+.post-menu-btn:hover {
+  color: var(--text-dark);
+  transform: scale(1.1);
+}
+
+/* POST IMAGE */
+
+.post-image-container {
+  width: 100%;
+  padding: 40px;
+  background: linear-gradient(135deg, #fef3c7, #dcfce7);
+  text-align: center;
+  font-size: 80px;
+  line-height: 1;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.post-uploaded-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  padding: 0;
+}
+
+/* POST CONTENT */
+
+.post-content {
+  padding: 15px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.post-content p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-dark);
+}
+
+/* ENGAGEMENT STATS */
+
+.post-stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 15px;
+  background: var(--bg-light);
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.post-stats span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* POST ACTIONS */
+
+.post-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 12px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 8px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.action-btn:hover {
+  background: var(--bg-light);
+  color: var(--text-dark);
+}
+
+.action-btn.liked {
+  color: #ef4444;
+  background: #fee2e2;
+}
+
+.action-btn.saved {
+  color: #3b82f6;
+  background: #dbeafe;
+}
+
+.action-btn span {
+  display: none;
+}
+
+/* COMMENTS SECTION */
+
+.comments-section {
+  padding: 15px;
+  background: var(--bg-light);
+  border-top: 1px solid #e5e7eb;
+}
+
+.comments-input-area {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.comment-input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 13px;
+  background: var(--bg-white);
+}
+
+.comment-input:focus {
+  outline: none;
+  border-color: var(--primary-green);
+}
+
+.comment-submit-btn {
+  padding: 10px 20px;
+  background: var(--primary-green);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.comment-submit-btn:hover {
+  background: var(--dark-green);
+}
+
+.comments-list {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  text-decoration: none;
-  padding: 8px 5px;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  color: #718096;
+  gap: 10px;
 }
 
-.mobile-nav-item:hover,
-.mobile-nav-item.active {
-  background: rgba(16, 185, 129, 0.1);
-  color: #10b981;
+.comment-item {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background: var(--bg-white);
+  border-radius: 6px;
 }
 
-.mobile-nav-icon {
+.comment-avatar {
   font-size: 24px;
+  flex-shrink: 0;
 }
 
-.mobile-nav-label {
-  font-size: 10px;
-  font-weight: 600;
+.comment-content {
+  flex: 1;
+}
+
+.comment-author {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.comment-text {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+
+/* NO RESULTS */
+
+.no-posts {
+  background: var(--bg-white);
+  border-radius: 12px;
+  padding: 60px 20px;
   text-align: center;
+  box-shadow: var(--shadow-md);
 }
 
-/* ==================== RESPONSIVE DESIGN ==================== */
-@media (max-width: 1200px) {
-  .irrigation-systems-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 15px;
-  }
-
-  .irrigation-filter-bar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 15px;
-    padding: 15px;
-    margin: 15px;
-  }
-
-  .sort-clear-group {
-    margin-left: 0;
-    justify-content: space-between;
-    width: 100%;
-  }
-
-  .irrigation-systems-container {
-    padding: 0 15px;
-  }
-
-  .irrigation-results-info {
-    margin: 0 15px 15px 15px;
-    padding: 12px 15px;
-  }
+.no-posts-emoji {
+  font-size: 48px;
+  margin-bottom: 10px;
 }
+
+.no-posts-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 5px;
+}
+
+.no-posts-hint {
+  font-size: 14px;
+  color: var(--text-light);
+}
+
+/* ===================================
+   FOOTER STYLES
+   =================================== */
+
 
 @media (max-width: 1024px) {
-  .header {
-    padding: 15px 20px;
-  }
-
-  .search-bar {
-    width: 280px;
-  }
-
-  .irrigation-filter-bar {
+  .social-main-container {
+    grid-template-columns: 240px 1fr;
     gap: 15px;
-    padding: 18px;
+    padding: 15px;
   }
 
-  .filter-label-main {
-    min-width: 120px;
+  .posts-list {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .filter-buttons-group {
-    gap: 8px;
+  .filter-card {
+    padding: 15px;
   }
 
-  .irrigation-filter-btn {
-    padding: 8px 14px;
-    font-size: 13px;
-  }
-}
-
-@media (max-width: 768px) {
-  .enhanced-irrigation-container {
-    padding-bottom: 100px;
+  .post-image-container {
+    padding: 30px;
+    font-size: 60px;
   }
 
-  .header {
-    padding: 12px 12px;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .img-logo {
-    gap: 10px;
-  }
-
-  .logo {
-    width: 40px;
-    height: 40px;
+  .action-btn {
+    padding: 8px 6px;
   }
 
   .heading {
-    font-size: 22px;
-  }
-
-  .search-bar {
-    width: 100%;
-    padding: 8px 16px;
+    font-size: 20px;
   }
 
   .search-input {
-    font-size: 14px;
+    font-size: 13px;
+    padding: 8px 35px 8px 12px;
   }
+}
 
-  .irrigation-filter-bar {
-    padding: 12px;
-    margin: 12px;
-    gap: 10px;
-    flex-direction: column;
-  }
+/* ===================================
+   SMALL TABLET/LANDSCAPE STYLES (768px)
+   =================================== */
 
-  .filter-label-main {
-    min-width: unset;
-    margin-bottom: 4px;
-  }
-
-  .filter-buttons-group {
-    width: 100%;
-    gap: 8px;
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .irrigation-filter-btn {
-    padding: 8px 12px;
-    font-size: 12px;
-    flex: 0 1 calc(50% - 4px);
-  }
-
-  .sort-clear-group {
-    width: 100%;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .irrigation-sort-select,
-  .irrigation-clear-btn {
-    width: 100%;
-  }
-
-  .irrigation-results-info {
-    margin: 12px;
-    padding: 10px 12px;
-    font-size: 14px;
-  }
-
-  .irrigation-systems-container {
-    padding: 0 12px;
-  }
-
-  .irrigation-category-section {
-    margin: 12px;
-  }
-
-  .irrigation-category-toggle {
-    padding: 14px;
-    gap: 10px;
-  }
-
-  .category-emoji {
-    font-size: 28px;
-    min-width: 35px;
-  }
-
-  .category-info h2 {
-    font-size: 17px;
-    margin-bottom: 3px;
-  }
-
-  .category-info p {
-    font-size: 12px;
-  }
-
-  .irrigation-systems-grid {
+@media (max-width: 768px) {
+  .social-main-container {
     grid-template-columns: 1fr;
     gap: 12px;
     padding: 12px;
   }
 
-  .irrigation-system-card {
-    padding: 14px;
-    border-radius: 12px;
+  .social-sidebar {
+    position: static;
+    display: none;
   }
 
-  .irrigation-recommended-badge {
-    top: 8px;
-    right: 8px;
-    padding: 5px 10px;
-    font-size: 11px;
+  .posts-list {
+    grid-template-columns: 1fr;
   }
 
-  .irrigation-card-header {
-    gap: 12px;
-    margin-bottom: 12px;
-  }
-
-  .irrigation-emoji-large {
-    font-size: 38px;
-    min-width: 45px;
-  }
-
-  .irrigation-name {
-    font-size: 16px;
-    font-weight: 700;
-  }
-
-  .irrigation-rating {
-    font-size: 12px;
-  }
-
-  .irrigation-description {
-    font-size: 12px;
-    padding: 8px;
-    margin-bottom: 10px;
-  }
-
-  .irrigation-specs {
-    gap: 8px;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-
-  .spec-row {
-    gap: 10px;
-  }
-
-  .spec-label {
-    font-size: 11px;
-    min-width: 100px;
-  }
-
-  .spec-value {
-    font-size: 12px;
-    min-width: 70px;
-  }
-
-  .efficiency-bar-small {
-    min-width: 60px;
-  }
-
-  .irrigation-benefits {
-    gap: 6px;
-    margin-bottom: 10px;
-  }
-
-  .irrigation-benefit-tag {
-    padding: 5px 10px;
-    font-size: 10px;
-  }
-
-  .irrigation-suitable {
-    padding: 8px;
-    margin-bottom: 10px;
-  }
-
-  .suitable-label {
-    font-size: 11px;
-    margin-bottom: 6px;
-  }
-
-  .soil-tag {
-    padding: 3px 8px;
-    font-size: 10px;
-  }
-
-  .irrigation-price-info {
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-
-  .price-label {
-    font-size: 11px;
-    margin-bottom: 6px;
-  }
-
-  .price-content {
-    gap: 8px;
-  }
-
-  .price-range {
-    font-size: 14px;
-  }
-
-  .price-trend {
-    font-size: 12px;
-    padding: 3px 8px;
-  }
-
-  .irrigation-contact {
-    gap: 8px;
-    margin-bottom: 10px;
-  }
-
-  .contact-badge {
-    padding: 6px 10px;
-    font-size: 11px;
-  }
-
-  .irrigation-maintenance {
-    padding-top: 10px;
-  }
-
-  .maintenance-label {
-    font-size: 11px;
-    margin-bottom: 4px;
-  }
-
-  .maintenance-text {
-    font-size: 11px;
+  .footer {
+    display: none;
   }
 
   .mobile-nav {
     display: block;
   }
 
-  .mobile-nav-grid {
-    grid-template-columns: repeat(6, 1fr);
-    gap: 3px;
-    padding: 6px 3px;
+  .social-feed {
+    gap: 15px;
+    padding-bottom: 80px;
   }
 
-  .mobile-nav-item {
-    padding: 6px 3px;
-    gap: 3px;
-  }
-
-  .mobile-nav-icon {
-    font-size: 20px;
-  }
-
-  .mobile-nav-label {
-    font-size: 8px;
-  }
-}
-
-@media (max-width: 640px) {
-  .header {
-    padding: 10px;
-  }
-
-  .heading {
-    font-size: 20px;
-  }
-
-  .search-bar {
-    width: 100%;
-    padding: 6px 12px;
-  }
-
-  .irrigation-filter-bar {
-    padding: 10px;
-    margin: 10px;
-  }
-
-  .irrigation-systems-grid {
-    gap: 10px;
-    padding: 10px;
-  }
-
-  .irrigation-system-card {
+  .post-header {
     padding: 12px;
   }
 
-  .irrigation-emoji-large {
-    font-size: 35px;
+  .post-avatar {
+    font-size: 36px;
   }
 
-  .category-emoji {
-    font-size: 26px;
-  }
-
-  .filter-buttons-group {
-    gap: 6px;
-  }
-
-  .irrigation-filter-btn {
-    flex: 0 1 calc(50% - 3px);
-    padding: 7px 10px;
-    font-size: 11px;
-  }
-}
-
-@media (max-width: 480px) {
-  .enhanced-irrigation-container {
-    padding-bottom: 110px;
-  }
-
-  .header {
-    padding: 8px;
-    gap: 8px;
-  }
-
-  .img-logo {
-    gap: 8px;
-  }
-
-  .logo {
-    width: 36px;
-    height: 36px;
-  }
-
-  .heading {
-    font-size: 18px;
-    letter-spacing: -0.3px;
-  }
-
-  .search-bar {
-    width: 100%;
-    padding: 5px 10px;
-    gap: 8px;
-  }
-
-  .search-input {
-    font-size: 13px;
-  }
-
-  .search-icon {
-    font-size: 16px;
-  }
-
-  .irrigation-filter-bar {
-    padding: 8px;
-    margin: 8px;
-    gap: 8px;
-  }
-
-  .filter-label-main {
-    font-size: 12px;
-    letter-spacing: 0.3px;
-  }
-
-  .filter-buttons-group {
-    width: 100%;
-    gap: 5px;
-  }
-
-  .irrigation-filter-btn {
-    flex: 1 1 auto;
-    padding: 6px 8px;
-    font-size: 10px;
-    border-radius: 16px;
-  }
-
-  .sort-clear-group {
-    width: 100%;
-  }
-
-  .irrigation-sort-select,
-  .irrigation-clear-btn {
-    width: 100%;
-    padding: 8px 12px;
-    font-size: 11px;
-  }
-
-  .irrigation-results-info {
-    margin: 8px;
-    padding: 8px;
-    font-size: 12px;
-  }
-
-  .irrigation-systems-container {
-    padding: 0 8px;
-  }
-
-  .irrigation-category-section {
-    margin: 8px;
-    border-radius: 12px;
-  }
-
-  .irrigation-category-toggle {
-    padding: 12px;
-    gap: 10px;
-    font-size: 14px;
-  }
-
-  .category-emoji {
-    font-size: 24px;
-  }
-
-  .category-info h2 {
+  .post-author-name {
     font-size: 15px;
   }
 
-  .category-info p {
+  .post-meta {
     font-size: 11px;
   }
 
-  .irrigation-systems-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
+  .post-image-container {
+    padding: 25px;
+    font-size: 50px;
+  }
+
+  .post-actions {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
     padding: 10px;
   }
 
-  .irrigation-system-card {
-    padding: 10px;
-    border-radius: 10px;
-  }
-
-  .irrigation-recommended-badge {
-    top: 6px;
-    right: 6px;
-    padding: 4px 8px;
-    font-size: 10px;
-  }
-
-  .irrigation-card-header {
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-
-  .irrigation-emoji-large {
-    font-size: 32px;
-    min-width: 40px;
-  }
-
-  .irrigation-name {
-    font-size: 14px;
-  }
-
-  .irrigation-header-info {
-    flex: 1;
-  }
-
-  .irrigation-rating {
-    font-size: 11px;
-  }
-
-  .irrigation-description {
-    font-size: 11px;
-    padding: 6px;
-    margin-bottom: 8px;
-    line-height: 1.4;
-  }
-
-  .irrigation-specs {
-    gap: 6px;
-    padding: 8px;
-    margin-bottom: 8px;
-  }
-
-  .spec-row {
-    gap: 8px;
-    justify-content: space-between;
-  }
-
-  .spec-label {
-    font-size: 10px;
-    min-width: 90px;
-  }
-
-  .spec-value {
-    font-size: 11px;
-    min-width: 60px;
-    text-align: right;
-  }
-
-  .efficiency-bar-small {
-    flex: 1;
-    min-width: 50px;
-    height: 4px;
-  }
-
-  .irrigation-benefits {
-    gap: 5px;
-    margin-bottom: 8px;
-  }
-
-  .irrigation-benefit-tag {
-    padding: 4px 8px;
-    font-size: 9px;
-  }
-
-  .irrigation-suitable {
-    padding: 6px;
-    margin-bottom: 8px;
-  }
-
-  .suitable-label {
-    font-size: 10px;
-    margin-bottom: 4px;
-  }
-
-  .soil-tags {
-    gap: 4px;
-  }
-
-  .soil-tag {
-    padding: 2px 6px;
-    font-size: 9px;
-  }
-
-  .irrigation-price-info {
-    padding: 8px;
-    margin-bottom: 8px;
-    border-radius: 8px;
-  }
-
-  .price-label {
-    font-size: 10px;
-    margin-bottom: 4px;
-  }
-
-  .price-content {
-    gap: 6px;
-  }
-
-  .price-range {
-    font-size: 13px;
-    font-weight: 700;
-  }
-
-  .price-trend {
-    font-size: 11px;
-    padding: 2px 6px;
-  }
-
-  .irrigation-contact {
-    gap: 6px;
-    margin-bottom: 8px;
-  }
-
-  .contact-badge {
-    padding: 5px 8px;
-    font-size: 10px;
-    min-width: 100px;
-  }
-
-  .contact-badge svg {
+  .action-btn {
+    padding: 8px 4px;
     font-size: 12px;
   }
 
-  .irrigation-maintenance {
-    padding-top: 8px;
+  .action-btn span {
+    display: none;
   }
 
-  .maintenance-label {
-    font-size: 10px;
-    margin-bottom: 3px;
+  .post-content {
+    padding: 12px;
   }
 
-  .maintenance-text {
-    font-size: 10px;
-    line-height: 1.3;
+  .post-content p {
+    font-size: 13px;
   }
 
-  .irrigation-no-results {
-    padding: 40px 20px;
-    margin: 15px 8px;
+  .post-stats {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .create-post-form {
+    padding: 15px;
+  }
+
+  .create-post-textarea {
+    min-height: 80px;
+    font-size: 13px;
+  }
+
+  .image-upload-label {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  .image-preview {
+    max-height: 250px;
+  }
+
+  .comments-section {
+    padding: 12px;
+  }
+
+  .comment-input {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  .comment-text {
+    font-size: 11px;
+  }
+}
+
+/* ===================================
+   MOBILE STYLES (480px - 767px)
+   =================================== */
+
+@media (max-width: 480px) {
+  .social-main-container {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 8px;
+  }
+
+  .posts-list {
+    grid-template-columns: 1fr;
+  }
+
+  .create-post-prompt {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .create-post-avatar {
+    font-size: 28px;
+  }
+
+  .post-header {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .post-avatar {
+    font-size: 32px;
+  }
+
+  .post-author-name {
     font-size: 14px;
   }
 
+  .post-author-details {
+    flex: 1;
+  }
+
+  .post-meta {
+    font-size: 10px;
+    gap: 6px;
+  }
+
+  .post-category {
+    padding: 2px 8px;
+    font-size: 10px;
+  }
+
+  .post-image-container {
+    padding: 20px;
+    font-size: 40px;
+  }
+
+  .post-content {
+    padding: 10px;
+  }
+
+  .post-content p {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .post-stats {
+    padding: 8px 10px;
+    font-size: 11px;
+    gap: 5px;
+  }
+
+  .post-actions {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    padding: 8px;
+  }
+
+  .action-btn {
+    padding: 6px 2px;
+    font-size: 10px;
+    gap: 2px;
+  }
+
+  .action-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .create-post-form {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .create-post-header {
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    gap: 10px;
+  }
+
+  .create-post-author {
+    font-size: 15px;
+  }
+
+  .create-post-location {
+    font-size: 11px;
+  }
+
+  .create-post-textarea {
+    min-height: 70px;
+    font-size: 12px;
+    padding: 10px;
+    margin-bottom: 12px;
+  }
+
+  .create-post-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .category-select {
+    width: 100%;
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .create-post-buttons {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .post-cancel-btn,
+  .post-submit-btn {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .comments-section {
+    padding: 10px;
+  }
+
+  .comments-input-area {
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .comment-input {
+    font-size: 11px;
+    padding: 8px;
+  }
+
+  .comment-submit-btn {
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+
+  .comment-avatar {
+    font-size: 20px;
+  }
+
+  .comment-author {
+    font-size: 11px;
+  }
+
+  .comment-text {
+    font-size: 10px;
+  }
+
+  .filter-title {
+    font-size: 16px;
+  }
 
   .mobile-nav {
-    display: block;
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
   .mobile-nav-grid {
-    grid-template-columns: repeat(6, 1fr);
-    gap: 2px;
-    padding: 4px 2px;
+    padding: 6px;
   }
 
   .mobile-nav-item {
-    padding: 4px 2px;
-    gap: 2px;
+    padding: 8px 0;
+    gap: 3px;
   }
 
   .mobile-nav-icon {
@@ -1232,53 +950,89 @@
   }
 
   .mobile-nav-label {
-    font-size: 7px;
-    font-weight: 700;
+    font-size: 9px;
+  }
+
+  .no-posts {
+    padding: 40px 15px;
+  }
+
+  .no-posts-emoji {
+    font-size: 36px;
+    margin-bottom: 8px;
+  }
+
+  .no-posts-text {
+    font-size: 16px;
+  }
+
+  .no-posts-hint {
+    font-size: 12px;
   }
 }
 
+/* ===================================
+   SMALL MOBILE STYLES (320px - 479px)
+   =================================== */
+
 @media (max-width: 360px) {
+  .social-main-container {
+    padding: 6px;
+    gap: 8px;
+  }
+
+  .posts-list {
+    grid-template-columns: 1fr;
+  }
+}
+/* ===================================
+   LANDSCAPE MODE (TABLET/MOBILE)
+   =================================== */
+
+@media (max-height: 600px) and (orientation: landscape) {
+  .header {
+    padding: 8px 12px;
+  }
+
   .heading {
     font-size: 16px;
   }
 
-  .search-bar {
-    padding: 4px 8px;
-  }
-
-  .irrigation-filter-bar {
-    padding: 6px;
-    margin: 6px;
-  }
-
-  .filter-label-main {
-    font-size: 11px;
-    min-width: unset;
-  }
-
-  .irrigation-filter-btn {
-    padding: 5px 6px;
-    font-size: 9px;
-  }
-
-  .irrigation-system-card {
+  .social-main-container {
     padding: 8px;
   }
 
-  .irrigation-emoji-large {
-    font-size: 28px;
+  .social-feed {
+    gap: 8px;
+    padding-bottom: 60px;
   }
 
-  .irrigation-name {
-    font-size: 13px;
+  .post-header {
+    padding: 8px;
   }
 
-  .spec-label {
-    font-size: 9px;
-    min-width: 75px;
+  .post-image-container {
+    padding: 15px;
+    font-size: 32px;
   }
 
-  .price-range {
-    font-size: 12px;
+  .post-content {
+    padding: 8px;
+  }
+
+  .post-actions {
+    padding: 6px;
+  }
+
+  .mobile-nav {
+    padding: 4px;
+  }
+
+  .mobile-nav-item {
+    padding: 4px 0;
+  }
+
+  .mobile-nav-icon {
+    font-size: 16px;
   }
 }

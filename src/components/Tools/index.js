@@ -412,7 +412,7 @@ class Tools extends Component {
                 <div className='enhanced-tools-filter'>
                     <div className='filter-section'>
                         <span className='filter-title'><FaFilter /> Filter & Sort:</span>
-                        <div className='filter-buttons'>
+                        <div className='filter-buttonss'>
                             {categories.map(category => (
                                 <button
                                     key={category}
@@ -484,7 +484,7 @@ class Tools extends Component {
                     <Link to='/marketplace'><button>MarketPlace</button></Link>
                     <Link to='/plants'><button>Plants</button></Link>
                     <Link to='/tools'><button>Tools</button></Link>
-                    <Link to='/irrigation'><button>Irrigation</button></Link>
+                    <Link to='/irrigation'><button>Posts</button></Link>
                     <Link to='/crops'><button>Crops</button></Link>
                 </footer>
 
@@ -509,7 +509,7 @@ class Tools extends Component {
                         </Link>
                         <Link to='/irrigation' className={`mobile-nav-item ${currentPath === '/irrigation' ? 'active' : ''}`}>
                             <span className='mobile-nav-icon'>💧</span>
-                            <span className='mobile-nav-label'>Irrigation</span>
+                            <span className='mobile-nav-label'>Posts</span>
                         </Link>
                         <Link to='/crops' className={`mobile-nav-item ${currentPath === '/crops' ? 'active' : ''}`}>
                             <span className='mobile-nav-icon'>🌾</span>

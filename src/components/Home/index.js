@@ -1189,7 +1189,7 @@ cancelProfile = () => {
               <span className="mobile-nav-label">Home</span>
             </Link>
             <Link to="/marketplace" className={`mobile-nav-item ${currentPath === '/animals' ? 'active' : ''}`}>
-              <span className="mobile-nav-icon">🛒</span>
+              <span className="mobile-nav-icon">🛍️</span>
               <span className="mobile-nav-label">MarketPlace</span>
             </Link>
             <Link to="/plants" className={`mobile-nav-item ${currentPath === '/plants' ? 'active' : ''}`}>
@@ -1201,7 +1201,7 @@ cancelProfile = () => {
               <span className="mobile-nav-label">Tools</span>
             </Link>
             <Link to="/irrigation" className={`mobile-nav-item ${currentPath === '/irrigation' ? 'active' : ''}`}>
-              <span className="mobile-nav-icon">💧</span>
+              <span className="mobile-nav-icon">📬</span>
               <span className="mobile-nav-label">Posts</span>
             </Link>
             <Link to="/crops" className={`mobile-nav-item ${currentPath === '/crops' ? 'active' : ''}`}>

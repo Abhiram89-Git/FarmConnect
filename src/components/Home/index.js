@@ -716,7 +716,7 @@ cancelProfile = () => {
       <div className="home-container">
         <header className="header">
           <div className="img-logo">
-            <img src="https://ik.imagekit.io/wer9cus16/Gemini_Generated_Image_hxzmtlhxzmtlhxzm.png?updatedAt=1761411100421" className="logo" alt="FarmConnect" />
+            <img src="https://res.cloudinary.com/dydyatmsi/image/upload/v1764740453/ChatGPT_Image_Dec_3_2025_11_10_27_AM_is7jud.png" className="logo" alt="FarmConnect" />
             <h1 className="heading">Farm<span className='connect'>Connect</span></h1>
           </div>
           <div className="search-bar">

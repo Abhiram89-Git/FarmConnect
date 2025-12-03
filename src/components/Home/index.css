@@ -45,16 +45,17 @@
 .logo {
   height: 80px;
   width: 80px;
+  background-color: white;
   border-radius: 50%;
 }
 
 .heading {
   font-size: 2rem;
   letter-spacing: 1px;
-  color: Black;
+  color: #f56e01;
 }
 .connect{
-  color: white;
+  color: #1a262d;
 }
 .search-bar {
   display: flex;
@@ -2860,6 +2861,7 @@ body.dark-mode .welcome-para {
   .logo {
     width: 40px;
     height: 40px;
+    background-color: white;
   }
 
   .heading {

@@ -2350,11 +2350,11 @@ body.dark-mode .welcome-para {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: black;
+    color: #f56e01;
   }
 
   .connect {
-    color: white;
+    color: #1a262d;
   }
 
   .dark-mode-toggle {
